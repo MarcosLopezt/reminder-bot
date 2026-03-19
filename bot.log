@@ -1,0 +1,564 @@
+2026-03-19 11:48:09,625 | CRITICAL | __main__ — GEMINI_API_KEY is not set. Exiting.
+2026-03-19 11:48:51,855 | INFO     | __main__ — Starting Telegram Reminder Bot…
+2026-03-19 11:56:17,947 | INFO     | __main__ — Starting Telegram Reminder Bot…
+2026-03-19 11:56:21,757 | INFO     | __main__ — Running startup tasks…
+2026-03-19 11:56:21,822 | INFO     | database — Database initialized successfully.
+2026-03-19 11:56:21,823 | INFO     | scheduler — APScheduler started.
+2026-03-19 11:56:21,825 | INFO     | scheduler — Loading 0 active task(s) into scheduler.
+2026-03-19 11:56:21,826 | INFO     | __main__ — Bot is ready.
+2026-03-19 11:56:22,074 | INFO     | telegram.ext.Application — Application started
+2026-03-19 12:02:58,379 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 12:02:59,441 | ERROR    | ai_parser — Gemini API error: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\nPlease retry in 609.60438ms.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}, {'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerMinutePerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}, {'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_input_token_count', 'quotaId': 'GenerateContentInputTokensPerModelPerMinute-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '0s'}]}}
+2026-03-19 12:03:19,356 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 12:03:20,385 | ERROR    | ai_parser — Gemini API error: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\nPlease retry in 39.653011324s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_input_token_count', 'quotaId': 'GenerateContentInputTokensPerModelPerMinute-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}, {'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerMinutePerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}, {'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '39s'}]}}
+2026-03-19 12:03:44,085 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 12:03:45,090 | ERROR    | ai_parser — Gemini API error: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\nPlease retry in 14.944726429s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_input_token_count', 'quotaId': 'GenerateContentInputTokensPerModelPerMinute-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}, {'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerMinutePerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}, {'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '14s'}]}}
+2026-03-19 12:04:01,675 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 12:04:02,141 | ERROR    | ai_parser — Gemini API error: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\nPlease retry in 57.896787879s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}, {'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerMinutePerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}, {'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_input_token_count', 'quotaId': 'GenerateContentInputTokensPerModelPerMinute-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '57s'}]}}
+2026-03-19 12:04:12,230 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 12:04:12,463 | ERROR    | ai_parser — Gemini API error: 429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\nPlease retry in 47.576169332s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_input_token_count', 'quotaId': 'GenerateContentInputTokensPerModelPerMinute-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}, {'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerMinutePerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}, {'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.0-flash'}}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '47s'}]}}
+2026-03-19 12:18:31,966 | INFO     | telegram.ext.Application — Application is stopping. This might take a moment.
+2026-03-19 12:18:31,981 | INFO     | telegram.ext.Application — Application.stop() complete
+2026-03-19 12:18:31,983 | INFO     | __main__ — Scheduler shut down.
+2026-03-19 12:22:21,626 | INFO     | __main__ — Starting Telegram Reminder Bot…
+2026-03-19 12:22:23,157 | INFO     | __main__ — Running startup tasks…
+2026-03-19 12:22:23,161 | INFO     | database — Database initialized successfully.
+2026-03-19 12:22:23,161 | INFO     | scheduler — APScheduler started.
+2026-03-19 12:22:23,163 | INFO     | scheduler — Loading 0 active task(s) into scheduler.
+2026-03-19 12:22:23,164 | INFO     | __main__ — Bot is ready.
+2026-03-19 12:22:23,408 | INFO     | telegram.ext.Application — Application started
+2026-03-19 12:22:46,692 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 12:22:50,977 | INFO     | ai_parser — Parsed task: {'description': 'Feed ciro', 'assignees': ['pablolopez'], 'include_self': True, 'frequency': 'daily', 'reminder_time': '09:00', 'reminder_day': None, 'cron_expression': None, 'confidence': 1.0}
+2026-03-19 12:23:01,744 | WARNING  | handlers.callbacks — Unhandled callback data: confirm_task
+2026-03-19 12:23:19,968 | WARNING  | handlers.callbacks — Unhandled callback data: confirm_task
+2026-03-19 12:32:51,282 | INFO     | telegram.ext.Application — Application is stopping. This might take a moment.
+2026-03-19 12:32:51,301 | INFO     | telegram.ext.Application — Application.stop() complete
+2026-03-19 12:32:51,304 | INFO     | __main__ — Scheduler shut down.
+2026-03-19 12:32:54,824 | INFO     | __main__ — Starting Telegram Reminder Bot…
+2026-03-19 12:32:56,449 | INFO     | __main__ — Running startup tasks…
+2026-03-19 12:32:56,453 | INFO     | database — Database initialized successfully.
+2026-03-19 12:32:56,453 | INFO     | scheduler — APScheduler started.
+2026-03-19 12:32:56,456 | INFO     | scheduler — Loading 0 active task(s) into scheduler.
+2026-03-19 12:32:56,456 | INFO     | __main__ — Bot is ready.
+2026-03-19 12:32:56,711 | INFO     | telegram.ext.Application — Application started
+2026-03-19 12:34:04,932 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 12:34:08,312 | INFO     | ai_parser — Parsed task: {'description': 'feed CIRO', 'assignees': ['pablolopez'], 'include_self': True, 'frequency': 'daily', 'reminder_time': '10:00', 'reminder_day': None, 'cron_expression': None, 'confidence': 0.9}
+2026-03-19 12:34:13,661 | INFO     | database — Created task 1: feed CIRO
+2026-03-19 12:34:13,691 | INFO     | scheduler — Scheduled primary reminder job 'reminder_1'.
+2026-03-19 12:34:13,692 | INFO     | scheduler — Scheduled follow-up reminder job 'followup_1'.
+2026-03-19 12:34:13,692 | INFO     | scheduler — Scheduled daily summary job 'summary_8041903654'.
+2026-03-19 12:44:59,436 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 12:45:02,382 | INFO     | ai_parser — Parsed task: {'description': 'Get lunch', 'assignees': [], 'include_self': True, 'frequency': 'daily', 'reminder_time': '00:48', 'reminder_day': None, 'cron_expression': None, 'confidence': 1.0}
+2026-03-19 12:45:08,045 | INFO     | database — Created task 2: Get lunch
+2026-03-19 12:45:08,059 | INFO     | scheduler — Scheduled primary reminder job 'reminder_2'.
+2026-03-19 12:45:08,060 | INFO     | scheduler — Scheduled follow-up reminder job 'followup_2'.
+2026-03-19 12:45:08,060 | INFO     | scheduler — Scheduled daily summary job 'summary_1602991912'.
+2026-03-19 12:49:28,498 | INFO     | telegram.ext.Application — Application is stopping. This might take a moment.
+2026-03-19 12:49:28,516 | INFO     | telegram.ext.Application — Application.stop() complete
+2026-03-19 12:49:28,517 | INFO     | __main__ — Scheduler shut down.
+2026-03-19 12:49:35,359 | INFO     | __main__ — Starting Telegram Reminder Bot…
+2026-03-19 12:49:36,897 | INFO     | __main__ — Running startup tasks…
+2026-03-19 12:49:36,913 | INFO     | database — Database initialized successfully.
+2026-03-19 12:49:36,913 | INFO     | scheduler — APScheduler started.
+2026-03-19 12:49:36,916 | INFO     | scheduler — Loading 2 active task(s) into scheduler.
+2026-03-19 12:49:36,917 | INFO     | scheduler — Scheduled primary reminder job 'reminder_1'.
+2026-03-19 12:49:36,918 | INFO     | scheduler — Scheduled follow-up reminder job 'followup_1'.
+2026-03-19 12:49:36,919 | INFO     | scheduler — Scheduled daily summary job 'summary_8041903654'.
+2026-03-19 12:49:36,920 | INFO     | scheduler — Scheduled primary reminder job 'reminder_2'.
+2026-03-19 12:49:36,921 | INFO     | scheduler — Scheduled follow-up reminder job 'followup_2'.
+2026-03-19 12:49:36,921 | INFO     | scheduler — Scheduled daily summary job 'summary_1602991912'.
+2026-03-19 12:49:36,921 | INFO     | __main__ — Bot is ready.
+2026-03-19 12:49:37,165 | INFO     | telegram.ext.Application — Application started
+2026-03-19 12:50:41,227 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 12:50:44,470 | INFO     | ai_parser — Parsed task: {'description': 'Give Ciro his pills', 'assignees': ['pablolopez'], 'include_self': True, 'frequency': 'daily', 'reminder_time': '00:53', 'reminder_day': None, 'cron_expression': None, 'confidence': 0.95}
+2026-03-19 12:50:48,297 | INFO     | database — Created task 3: Give Ciro his pills
+2026-03-19 12:50:48,326 | INFO     | scheduler — Scheduled primary reminder job 'reminder_3'.
+2026-03-19 12:50:48,327 | INFO     | scheduler — Scheduled follow-up reminder job 'followup_3'.
+2026-03-19 13:15:22,024 | INFO     | telegram.ext.Application — Application is stopping. This might take a moment.
+2026-03-19 13:15:22,052 | INFO     | telegram.ext.Application — Application.stop() complete
+2026-03-19 13:15:22,055 | INFO     | __main__ — Scheduler shut down.
+2026-03-19 13:15:25,342 | INFO     | __main__ — Starting Telegram Reminder Bot…
+2026-03-19 13:15:26,843 | INFO     | __main__ — Running startup tasks…
+2026-03-19 13:15:26,846 | INFO     | database — Database initialized successfully.
+2026-03-19 13:15:26,847 | INFO     | scheduler — APScheduler started.
+2026-03-19 13:15:26,849 | INFO     | scheduler — Loading 3 active task(s) into scheduler.
+2026-03-19 13:15:26,850 | INFO     | scheduler — Scheduled primary reminder job 'reminder_1'.
+2026-03-19 13:15:26,851 | INFO     | scheduler — Scheduled follow-up reminder job 'followup_1'.
+2026-03-19 13:15:26,852 | INFO     | scheduler — Scheduled daily summary job 'summary_8041903654'.
+2026-03-19 13:15:26,852 | INFO     | scheduler — Scheduled primary reminder job 'reminder_2'.
+2026-03-19 13:15:26,853 | INFO     | scheduler — Scheduled follow-up reminder job 'followup_2'.
+2026-03-19 13:15:26,854 | INFO     | scheduler — Scheduled daily summary job 'summary_1602991912'.
+2026-03-19 13:15:26,854 | INFO     | scheduler — Scheduled primary reminder job 'reminder_3'.
+2026-03-19 13:15:26,855 | INFO     | scheduler — Scheduled follow-up reminder job 'followup_3'.
+2026-03-19 13:15:26,856 | INFO     | __main__ — Bot is ready.
+2026-03-19 13:15:27,110 | INFO     | telegram.ext.Application — Application started
+2026-03-19 13:15:51,420 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 13:15:54,970 | INFO     | ai_parser — Parsed task: {'description': 'give Ciro his pills', 'assignees': ['pablolopez'], 'include_self': True, 'frequency': 'daily', 'reminder_time': '13:20', 'reminder_day': None, 'cron_expression': None, 'confidence': 1.0}
+2026-03-19 13:15:58,077 | INFO     | database — Created task 4: give Ciro his pills
+2026-03-19 13:15:58,106 | ERROR    | __main__ — Unhandled exception:
+Traceback (most recent call last):
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\telegram\ext\_application.py", line 1335, in process_update
+    await coroutine
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\telegram\ext\_handlers\basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\plopez\IA\telegram-reminder-bot\handlers\callbacks.py", line 305, in callback_router
+    await confirm_task_callback(update, context)
+  File "C:\Users\plopez\IA\telegram-reminder-bot\handlers\callbacks.py", line 104, in confirm_task_callback
+    bot_username = query.bot.username or "this bot"
+                   ^^^^^^^^^
+AttributeError: 'CallbackQuery' object has no attribute 'bot'
+2026-03-19 13:18:56,255 | INFO     | telegram.ext.Application — Application is stopping. This might take a moment.
+2026-03-19 13:18:56,270 | INFO     | telegram.ext.Application — Application.stop() complete
+2026-03-19 13:18:56,271 | INFO     | __main__ — Scheduler shut down.
+2026-03-19 13:18:59,867 | INFO     | __main__ — Starting Telegram Reminder Bot…
+2026-03-19 13:19:01,459 | INFO     | __main__ — Running startup tasks…
+2026-03-19 13:19:01,462 | INFO     | database — Database initialized successfully.
+2026-03-19 13:19:01,463 | INFO     | scheduler — APScheduler started.
+2026-03-19 13:19:01,465 | INFO     | scheduler — Loading 4 active task(s) into scheduler.
+2026-03-19 13:19:01,466 | INFO     | scheduler — Scheduled primary reminder job 'reminder_1'.
+2026-03-19 13:19:01,467 | INFO     | scheduler — Scheduled follow-up reminder job 'followup_1'.
+2026-03-19 13:19:01,467 | INFO     | scheduler — Scheduled daily summary job 'summary_8041903654'.
+2026-03-19 13:19:01,468 | INFO     | scheduler — Scheduled primary reminder job 'reminder_2'.
+2026-03-19 13:19:01,469 | INFO     | scheduler — Scheduled follow-up reminder job 'followup_2'.
+2026-03-19 13:19:01,469 | INFO     | scheduler — Scheduled daily summary job 'summary_1602991912'.
+2026-03-19 13:19:01,470 | INFO     | scheduler — Scheduled primary reminder job 'reminder_3'.
+2026-03-19 13:19:01,471 | INFO     | scheduler — Scheduled follow-up reminder job 'followup_3'.
+2026-03-19 13:19:01,471 | INFO     | scheduler — Scheduled primary reminder job 'reminder_4'.
+2026-03-19 13:19:01,472 | INFO     | scheduler — Scheduled follow-up reminder job 'followup_4'.
+2026-03-19 13:19:01,472 | INFO     | __main__ — Bot is ready.
+2026-03-19 13:19:01,721 | INFO     | telegram.ext.Application — Application started
+2026-03-19 13:19:34,275 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 13:19:37,132 | INFO     | ai_parser — Parsed task: {'description': 'Give CIRO pills', 'assignees': ['pablolopez'], 'include_self': True, 'frequency': 'daily', 'reminder_time': '13:22', 'reminder_day': None, 'cron_expression': None, 'confidence': 1.0}
+2026-03-19 13:19:42,725 | INFO     | database — Created task 5: Give CIRO pills
+2026-03-19 13:19:43,153 | INFO     | scheduler — Scheduled primary reminder job 'reminder_5'.
+2026-03-19 13:19:43,154 | INFO     | scheduler — Scheduled follow-up reminder job 'followup_5'.
+2026-03-19 13:21:00,219 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 13:21:06,337 | INFO     | ai_parser — Parsed task: {'description': 'Give CIRO pills', 'assignees': ['pablolopez'], 'include_self': True, 'frequency': 'daily', 'reminder_time': '13:22', 'reminder_day': None, 'cron_expression': None, 'confidence': 1.0}
+2026-03-19 13:21:10,940 | INFO     | database — Created task 6: Give CIRO pills
+2026-03-19 13:21:11,364 | INFO     | scheduler — Scheduled primary reminder job 'reminder_6'.
+2026-03-19 13:21:11,365 | INFO     | scheduler — Scheduled follow-up reminder job 'followup_6'.
+2026-03-19 13:22:51,488 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 13:22:54,963 | INFO     | ai_parser — Parsed task: {'description': 'give juanchi pills', 'assignees': ['plopezarg'], 'include_self': True, 'frequency': 'daily', 'reminder_time': '13:25', 'reminder_day': None, 'cron_expression': None, 'confidence': 1.0}
+2026-03-19 13:22:57,666 | INFO     | database — Created task 7: give juanchi pills
+2026-03-19 13:22:57,700 | INFO     | scheduler — Scheduled primary reminder job 'reminder_7'.
+2026-03-19 13:22:57,700 | INFO     | scheduler — Scheduled follow-up reminder job 'followup_7'.
+2026-03-19 13:23:37,687 | INFO     | scheduler — Removed job 'reminder_2'.
+2026-03-19 13:23:37,687 | INFO     | scheduler — Removed job 'followup_2'.
+2026-03-19 13:23:54,587 | INFO     | scheduler — Removed job 'reminder_1'.
+2026-03-19 13:23:54,588 | INFO     | scheduler — Removed job 'followup_1'.
+2026-03-19 14:19:14,082 | INFO     | telegram.ext.Application — Application is stopping. This might take a moment.
+2026-03-19 14:19:14,106 | INFO     | telegram.ext.Application — Application.stop() complete
+2026-03-19 14:19:14,108 | INFO     | __main__ — Scheduler shut down.
+2026-03-19 14:28:09,331 | INFO     | __main__ — Starting Telegram Reminder Bot…
+2026-03-19 14:28:10,969 | INFO     | __main__ — Running startup tasks…
+2026-03-19 14:28:11,040 | INFO     | database — Database initialized successfully.
+2026-03-19 14:28:11,049 | INFO     | apscheduler.scheduler — Scheduler started
+2026-03-19 14:28:11,050 | INFO     | scheduler — APScheduler started (loop id=1826302960240).
+2026-03-19 14:28:11,052 | INFO     | scheduler — Loading 0 active task(s) into scheduler.
+2026-03-19 14:28:11,053 | INFO     | __main__ — Bot is ready.
+2026-03-19 14:28:11,297 | INFO     | apscheduler.scheduler — Scheduler started
+2026-03-19 14:28:11,298 | INFO     | telegram.ext.Application — Application started
+2026-03-19 14:30:27,276 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 14:30:29,989 | INFO     | ai_parser — Parsed task: {'description': 'Give ciro pills', 'assignees': [], 'include_self': True, 'frequency': 'daily', 'reminder_time': '14:33', 'reminder_day': None, 'cron_expression': None, 'confidence': 1.0}
+2026-03-19 14:30:35,183 | INFO     | database — Created task 1: Give ciro pills
+2026-03-19 14:30:35,199 | INFO     | apscheduler.scheduler — Added job "send_reminder" to job store "default"
+2026-03-19 14:30:35,199 | INFO     | scheduler — Scheduled primary reminder job 'reminder_1' — next run: 2026-03-20 14:33:00+00:00 (tz=UTC)
+2026-03-19 14:30:35,200 | INFO     | apscheduler.scheduler — Added job "send_followup_reminder" to job store "default"
+2026-03-19 14:30:35,200 | INFO     | scheduler — Scheduled follow-up reminder job 'followup_1' — next run: 2026-03-20 16:33:00+00:00
+2026-03-19 14:30:35,201 | INFO     | apscheduler.scheduler — Added job "send_daily_summary" to job store "default"
+2026-03-19 14:30:35,201 | INFO     | scheduler — Scheduled daily summary job 'summary_8041903654' — next run: 2026-03-19 23:30:00+00:00
+2026-03-19 14:32:10,912 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 14:32:14,422 | INFO     | ai_parser — Parsed task: {'description': 'give juanchi food', 'assignees': ['plopezarg'], 'include_self': True, 'frequency': 'daily', 'reminder_time': '14:35', 'reminder_day': None, 'cron_expression': None, 'confidence': 0.95}
+2026-03-19 14:32:17,457 | INFO     | database — Created task 2: give juanchi food
+2026-03-19 14:32:17,488 | INFO     | apscheduler.scheduler — Added job "send_reminder" to job store "default"
+2026-03-19 14:32:17,488 | INFO     | scheduler — Scheduled primary reminder job 'reminder_2' — next run: 2026-03-20 14:35:00+00:00 (tz=UTC)
+2026-03-19 14:32:17,489 | INFO     | apscheduler.scheduler — Added job "send_followup_reminder" to job store "default"
+2026-03-19 14:32:17,489 | INFO     | scheduler — Scheduled follow-up reminder job 'followup_2' — next run: 2026-03-20 16:35:00+00:00
+2026-03-19 15:10:49,157 | INFO     | telegram.ext.Application — Application is stopping. This might take a moment.
+2026-03-19 15:10:49,162 | INFO     | apscheduler.scheduler — Scheduler has been shut down
+2026-03-19 15:10:49,181 | INFO     | telegram.ext.Application — Application.stop() complete
+2026-03-19 15:10:49,183 | INFO     | __main__ — Scheduler shut down.
+2026-03-19 15:10:49,183 | INFO     | apscheduler.scheduler — Scheduler has been shut down
+2026-03-19 15:10:54,709 | INFO     | __main__ — Starting Telegram Reminder Bot…
+2026-03-19 15:10:56,350 | INFO     | __main__ — Running startup tasks…
+2026-03-19 15:10:56,374 | INFO     | database — Database initialized successfully.
+2026-03-19 15:10:56,374 | INFO     | scheduler — PTB JobQueue ready (APScheduler id=1676833868496).
+2026-03-19 15:10:56,377 | INFO     | scheduler — Loading 2 active task(s) into job queue.
+2026-03-19 15:10:56,378 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 15:10:56,378 | ERROR    | scheduler — Failed to schedule task 1.
+Traceback (most recent call last):
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\telegram\ext\_jobqueue.py", line 833, in __getattr__
+    return getattr(self.job, item)
+AttributeError: 'Job' object has no attribute 'next_t'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\plopez\IA\telegram-reminder-bot\scheduler.py", line 315, in load_all_tasks
+    schedule_task_jobs(task, bot)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\plopez\IA\telegram-reminder-bot\scheduler.py", line 256, in schedule_task_jobs
+    primary_job.next_t,
+    ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\telegram\ext\_jobqueue.py", line 835, in __getattr__
+    raise AttributeError(
+        f"Neither 'telegram.ext.Job' nor 'apscheduler.job.Job' has attribute '{item}'"
+    ) from exc
+AttributeError: Neither 'telegram.ext.Job' nor 'apscheduler.job.Job' has attribute 'next_t'
+2026-03-19 15:10:56,384 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 15:10:56,384 | ERROR    | scheduler — Failed to schedule task 2.
+Traceback (most recent call last):
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\telegram\ext\_jobqueue.py", line 833, in __getattr__
+    return getattr(self.job, item)
+AttributeError: 'Job' object has no attribute 'next_t'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\plopez\IA\telegram-reminder-bot\scheduler.py", line 315, in load_all_tasks
+    schedule_task_jobs(task, bot)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\plopez\IA\telegram-reminder-bot\scheduler.py", line 256, in schedule_task_jobs
+    primary_job.next_t,
+    ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\telegram\ext\_jobqueue.py", line 835, in __getattr__
+    raise AttributeError(
+        f"Neither 'telegram.ext.Job' nor 'apscheduler.job.Job' has attribute '{item}'"
+    ) from exc
+AttributeError: Neither 'telegram.ext.Job' nor 'apscheduler.job.Job' has attribute 'next_t'
+2026-03-19 15:10:56,388 | INFO     | scheduler — === Scheduled jobs (2) ===
+2026-03-19 15:11:33,366 | INFO     | __main__ — Starting Telegram Reminder Bot…
+2026-03-19 15:11:34,925 | INFO     | __main__ — Running startup tasks…
+2026-03-19 15:11:34,942 | INFO     | database — Database initialized successfully.
+2026-03-19 15:11:34,942 | INFO     | scheduler — PTB JobQueue ready (APScheduler id=2188176625008).
+2026-03-19 15:11:34,944 | INFO     | scheduler — Loading 2 active task(s) into job queue.
+2026-03-19 15:11:34,944 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 15:11:34,945 | ERROR    | scheduler — Failed to schedule task 1.
+Traceback (most recent call last):
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\telegram\ext\_jobqueue.py", line 833, in __getattr__
+    return getattr(self.job, item)
+AttributeError: 'Job' object has no attribute 'next_t'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\plopez\IA\telegram-reminder-bot\scheduler.py", line 315, in load_all_tasks
+    schedule_task_jobs(task, bot)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\plopez\IA\telegram-reminder-bot\scheduler.py", line 256, in schedule_task_jobs
+    primary_job.next_t,
+    ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\telegram\ext\_jobqueue.py", line 835, in __getattr__
+    raise AttributeError(
+        f"Neither 'telegram.ext.Job' nor 'apscheduler.job.Job' has attribute '{item}'"
+    ) from exc
+AttributeError: Neither 'telegram.ext.Job' nor 'apscheduler.job.Job' has attribute 'next_t'
+2026-03-19 15:11:34,948 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 15:11:34,948 | ERROR    | scheduler — Failed to schedule task 2.
+Traceback (most recent call last):
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\telegram\ext\_jobqueue.py", line 833, in __getattr__
+    return getattr(self.job, item)
+AttributeError: 'Job' object has no attribute 'next_t'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\plopez\IA\telegram-reminder-bot\scheduler.py", line 315, in load_all_tasks
+    schedule_task_jobs(task, bot)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^
+  File "C:\Users\plopez\IA\telegram-reminder-bot\scheduler.py", line 256, in schedule_task_jobs
+    primary_job.next_t,
+    ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\telegram\ext\_jobqueue.py", line 835, in __getattr__
+    raise AttributeError(
+        f"Neither 'telegram.ext.Job' nor 'apscheduler.job.Job' has attribute '{item}'"
+    ) from exc
+AttributeError: Neither 'telegram.ext.Job' nor 'apscheduler.job.Job' has attribute 'next_t'
+2026-03-19 15:11:34,952 | INFO     | scheduler — === Scheduled jobs (2) ===
+2026-03-19 15:12:54,811 | INFO     | __main__ — Starting Telegram Reminder Bot…
+2026-03-19 15:12:56,405 | INFO     | __main__ — Running startup tasks…
+2026-03-19 15:12:56,411 | INFO     | database — Database initialized successfully.
+2026-03-19 15:12:56,411 | INFO     | scheduler — PTB JobQueue ready (APScheduler id=2169791548784).
+2026-03-19 15:12:56,413 | INFO     | scheduler — Loading 2 active task(s) into job queue.
+2026-03-19 15:12:56,414 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 15:12:56,415 | INFO     | scheduler — Scheduled primary reminder 'reminder_1' — next run: N/A  (tz=UTC)
+2026-03-19 15:12:56,415 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 15:12:56,416 | INFO     | scheduler — Scheduled follow-up reminder 'followup_1' — next run: N/A
+2026-03-19 15:12:56,416 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 15:12:56,417 | INFO     | scheduler — Scheduled daily summary 'summary_8041903654' — next run: N/A
+2026-03-19 15:12:56,417 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 15:12:56,418 | INFO     | scheduler — Scheduled primary reminder 'reminder_2' — next run: N/A  (tz=UTC)
+2026-03-19 15:12:56,418 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 15:12:56,419 | INFO     | scheduler — Scheduled follow-up reminder 'followup_2' — next run: N/A
+2026-03-19 15:12:56,419 | INFO     | scheduler — === Scheduled jobs (5) ===
+2026-03-19 15:12:56,420 | INFO     | scheduler —   reminder_1                           next: N/A
+2026-03-19 15:12:56,420 | INFO     | scheduler —   followup_1                           next: N/A
+2026-03-19 15:12:56,420 | INFO     | scheduler —   summary_8041903654                   next: N/A
+2026-03-19 15:12:56,421 | INFO     | scheduler —   reminder_2                           next: N/A
+2026-03-19 15:12:56,421 | INFO     | scheduler —   followup_2                           next: N/A
+2026-03-19 15:12:56,421 | INFO     | scheduler — === End of job list ===
+2026-03-19 15:12:56,422 | INFO     | __main__ — Bot is ready.
+2026-03-19 15:12:56,669 | INFO     | apscheduler.scheduler — Added job "reminder_1" to job store "default"
+2026-03-19 15:12:56,669 | INFO     | apscheduler.scheduler — Added job "followup_1" to job store "default"
+2026-03-19 15:12:56,670 | INFO     | apscheduler.scheduler — Added job "summary_8041903654" to job store "default"
+2026-03-19 15:12:56,670 | INFO     | apscheduler.scheduler — Added job "reminder_2" to job store "default"
+2026-03-19 15:12:56,671 | INFO     | apscheduler.scheduler — Added job "followup_2" to job store "default"
+2026-03-19 15:12:56,671 | INFO     | apscheduler.scheduler — Scheduler started
+2026-03-19 15:12:56,671 | INFO     | telegram.ext.Application — Application started
+2026-03-19 15:12:56,672 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 15:12:56,672 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 23:30:00+00:00 (in 19023.327397 seconds)
+2026-03-19 15:14:14,951 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 15:14:38,883 | INFO     | ai_parser — Parsed task: {'description': 'Take the trash out', 'assignees': [], 'include_self': True, 'frequency': 'daily', 'reminder_time': '15:16', 'reminder_day': None, 'cron_expression': None, 'confidence': 0.6}
+2026-03-19 15:14:43,957 | INFO     | database — Created task 3: Take the trash out
+2026-03-19 15:14:43,976 | INFO     | apscheduler.scheduler — Added job "reminder_3" to job store "default"
+2026-03-19 15:14:43,976 | INFO     | scheduler — Scheduled primary reminder 'reminder_3' — next run: 2026-03-20 15:16:00+00:00  (tz=UTC)
+2026-03-19 15:14:43,977 | INFO     | apscheduler.scheduler — Added job "followup_3" to job store "default"
+2026-03-19 15:14:43,977 | INFO     | scheduler — Scheduled follow-up reminder 'followup_3' — next run: 2026-03-20 17:16:00+00:00
+2026-03-19 15:14:43,978 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 15:14:43,978 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 23:30:00+00:00 (in 18916.021495 seconds)
+2026-03-19 15:14:43,978 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 15:14:43,979 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 23:30:00+00:00 (in 18916.020942 seconds)
+2026-03-19 15:20:39,519 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 15:20:56,033 | INFO     | ai_parser — Parsed task: {'description': 'Clean the bathroom', 'assignees': [], 'include_self': True, 'frequency': 'daily', 'reminder_time': '18:22', 'reminder_day': None, 'cron_expression': None, 'confidence': 0.8}
+2026-03-19 15:20:58,817 | INFO     | database — Created task 4: Clean the bathroom
+2026-03-19 15:20:58,833 | INFO     | apscheduler.scheduler — Added job "reminder_4" to job store "default"
+2026-03-19 15:20:58,834 | INFO     | scheduler — Scheduled primary reminder 'reminder_4' — next run: 2026-03-19 18:22:00+00:00  (tz=UTC)
+2026-03-19 15:20:58,834 | INFO     | apscheduler.scheduler — Added job "followup_4" to job store "default"
+2026-03-19 15:20:58,835 | INFO     | scheduler — Scheduled follow-up reminder 'followup_4' — next run: 2026-03-19 20:22:00+00:00
+2026-03-19 15:20:58,835 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 15:20:58,836 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 18:22:00+00:00 (in 61.163837 seconds)
+2026-03-19 15:20:58,836 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 15:20:58,836 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 18:22:00+00:00 (in 61.163232 seconds)
+2026-03-19 15:22:00,001 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 15:22:00,002 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 20:22:00+00:00 (in 7199.997708 seconds)
+2026-03-19 15:22:00,002 | INFO     | apscheduler.executors.default — Running job "reminder_4 (trigger: cron[hour='18', minute='22'], next run at: 2026-03-20 18:22:00 UTC)" (scheduled at 2026-03-19 18:22:00+00:00)
+2026-03-19 15:22:00,003 | INFO     | scheduler — >>> REMINDER JOB FIRED  task_id=4  chat_id=8041903654  date=2026-03-19
+2026-03-19 15:22:00,008 | INFO     | scheduler — Task 4 not done yet; sending reminder to chat 8041903654.
+2026-03-19 15:22:00,901 | INFO     | scheduler — DMing 1 assignee(s) for task 4.
+2026-03-19 15:22:00,901 | INFO     | apscheduler.executors.default — Job "reminder_4 (trigger: cron[hour='18', minute='22'], next run at: 2026-03-20 18:22:00 UTC)" executed successfully
+2026-03-19 16:03:29,012 | INFO     | telegram.ext.Application — Application is stopping. This might take a moment.
+2026-03-19 16:03:29,039 | INFO     | apscheduler.scheduler — Scheduler has been shut down
+2026-03-19 16:03:29,056 | INFO     | telegram.ext.Application — Application.stop() complete
+2026-03-19 16:03:37,540 | INFO     | __main__ — Starting Telegram Reminder Bot…
+2026-03-19 16:03:40,180 | INFO     | __main__ — Running startup tasks…
+2026-03-19 16:03:40,267 | INFO     | database — Migrated UTC timezone rows to America/Argentina/Cordoba.
+2026-03-19 16:03:40,268 | INFO     | database — Database initialized successfully.
+2026-03-19 16:03:40,269 | INFO     | scheduler — PTB JobQueue ready (APScheduler id=1924077571104).
+2026-03-19 16:03:40,277 | INFO     | scheduler — Loading 4 active task(s) into job queue.
+2026-03-19 16:03:41,032 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 16:03:41,033 | INFO     | scheduler — Scheduled primary reminder 'reminder_1' — next run: N/A  (tz=America/Argentina/Cordoba)
+2026-03-19 16:03:41,034 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 16:03:41,034 | INFO     | scheduler — Scheduled follow-up reminder 'followup_1' — next run: N/A
+2026-03-19 16:03:41,035 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 16:03:41,036 | INFO     | scheduler — Scheduled daily summary 'summary_8041903654' — next run: N/A
+2026-03-19 16:03:41,037 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 16:03:41,037 | INFO     | scheduler — Scheduled primary reminder 'reminder_2' — next run: N/A  (tz=America/Argentina/Cordoba)
+2026-03-19 16:03:41,038 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 16:03:41,039 | INFO     | scheduler — Scheduled follow-up reminder 'followup_2' — next run: N/A
+2026-03-19 16:03:41,040 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 16:03:41,041 | INFO     | scheduler — Scheduled primary reminder 'reminder_3' — next run: N/A  (tz=America/Argentina/Cordoba)
+2026-03-19 16:03:41,041 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 16:03:41,042 | INFO     | scheduler — Scheduled follow-up reminder 'followup_3' — next run: N/A
+2026-03-19 16:03:41,043 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 16:03:41,043 | INFO     | scheduler — Scheduled primary reminder 'reminder_4' — next run: N/A  (tz=America/Argentina/Cordoba)
+2026-03-19 16:03:41,044 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 16:03:41,045 | INFO     | scheduler — Scheduled follow-up reminder 'followup_4' — next run: N/A
+2026-03-19 16:03:41,046 | INFO     | scheduler — === Scheduled jobs (9) ===
+2026-03-19 16:03:41,046 | INFO     | scheduler —   reminder_1                           next: N/A
+2026-03-19 16:03:41,047 | INFO     | scheduler —   followup_1                           next: N/A
+2026-03-19 16:03:41,047 | INFO     | scheduler —   summary_8041903654                   next: N/A
+2026-03-19 16:03:41,048 | INFO     | scheduler —   reminder_2                           next: N/A
+2026-03-19 16:03:41,048 | INFO     | scheduler —   followup_2                           next: N/A
+2026-03-19 16:03:41,049 | INFO     | scheduler —   reminder_3                           next: N/A
+2026-03-19 16:03:41,050 | INFO     | scheduler —   followup_3                           next: N/A
+2026-03-19 16:03:41,050 | INFO     | scheduler —   reminder_4                           next: N/A
+2026-03-19 16:03:41,051 | INFO     | scheduler —   followup_4                           next: N/A
+2026-03-19 16:03:41,051 | INFO     | scheduler — === End of job list ===
+2026-03-19 16:03:41,052 | INFO     | __main__ — Bot is ready.
+2026-03-19 16:03:41,315 | INFO     | apscheduler.scheduler — Added job "reminder_1" to job store "default"
+2026-03-19 16:03:41,317 | INFO     | apscheduler.scheduler — Added job "followup_1" to job store "default"
+2026-03-19 16:03:41,319 | INFO     | apscheduler.scheduler — Added job "summary_8041903654" to job store "default"
+2026-03-19 16:03:41,320 | INFO     | apscheduler.scheduler — Added job "reminder_2" to job store "default"
+2026-03-19 16:03:41,322 | INFO     | apscheduler.scheduler — Added job "followup_2" to job store "default"
+2026-03-19 16:03:41,324 | INFO     | apscheduler.scheduler — Added job "reminder_3" to job store "default"
+2026-03-19 16:03:41,326 | INFO     | apscheduler.scheduler — Added job "followup_3" to job store "default"
+2026-03-19 16:03:41,327 | INFO     | apscheduler.scheduler — Added job "reminder_4" to job store "default"
+2026-03-19 16:03:41,329 | INFO     | apscheduler.scheduler — Added job "followup_4" to job store "default"
+2026-03-19 16:03:41,331 | INFO     | apscheduler.scheduler — Scheduler started
+2026-03-19 16:03:41,333 | INFO     | telegram.ext.Application — Application started
+2026-03-19 16:03:41,335 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 16:03:41,337 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 19:33:00+00:00 (in 1758.662573 seconds)
+2026-03-19 16:04:24,389 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 16:04:27,653 | INFO     | ai_parser — classify_message intent=create_task lang=es
+2026-03-19 16:04:27,654 | INFO     | handlers.messages — Intent: create_task  user=marcoslopezt  text='recordame lavar los platos hoy a las 16:06'
+2026-03-19 16:04:35,923 | ERROR    | __main__ — Unhandled exception:
+Traceback (most recent call last):
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\telegram\ext\_application.py", line 1335, in process_update
+    await coroutine
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\telegram\ext\_handlers\basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\plopez\IA\telegram-reminder-bot\handlers\callbacks.py", line 326, in callback_router
+    await confirm_task_callback(update, context)
+  File "C:\Users\plopez\IA\telegram-reminder-bot\handlers\callbacks.py", line 83, in confirm_task_callback
+    task_id = await db.create_task(
+              ^^^^^^^^^^^^^^^^^^^^^
+    ...<11 lines>...
+    )
+    ^
+  File "C:\Users\plopez\IA\telegram-reminder-bot\database.py", line 147, in create_task
+    cursor = await db.execute(
+             ^^^^^^^^^^^^^^^^^
+    ...<12 lines>...
+    )
+    ^
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\aiosqlite\core.py", line 223, in execute
+    cursor = await self._execute(self._conn.execute, sql, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\aiosqlite\core.py", line 160, in _execute
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\aiosqlite\core.py", line 63, in _connection_worker_thread
+    result = function()
+sqlite3.IntegrityError: NOT NULL constraint failed: tasks.frequency
+2026-03-19 16:33:00,009 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 16:33:00,017 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 19:35:00+00:00 (in 119.982749 seconds)
+2026-03-19 16:33:00,019 | INFO     | apscheduler.executors.default — Running job "followup_1 (trigger: cron[hour='16', minute='33'], next run at: 2026-03-20 16:33:00 -03)" (scheduled at 2026-03-19 16:33:00-03:00)
+2026-03-19 16:33:00,022 | INFO     | scheduler — >>> FOLLOW-UP JOB FIRED  task_id=1  chat_id=8041903654
+2026-03-19 16:33:00,049 | INFO     | scheduler — Task 1 already done; skipping follow-up.
+2026-03-19 16:33:00,051 | INFO     | apscheduler.executors.default — Job "followup_1 (trigger: cron[hour='16', minute='33'], next run at: 2026-03-20 16:33:00 -03)" executed successfully
+2026-03-19 16:35:00,017 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 16:35:00,023 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 20:16:00+00:00 (in 2459.976948 seconds)
+2026-03-19 16:35:00,025 | INFO     | apscheduler.executors.default — Running job "followup_2 (trigger: cron[hour='16', minute='35'], next run at: 2026-03-20 16:35:00 -03)" (scheduled at 2026-03-19 16:35:00-03:00)
+2026-03-19 16:35:00,029 | INFO     | scheduler — >>> FOLLOW-UP JOB FIRED  task_id=2  chat_id=8041903654
+2026-03-19 16:35:01,434 | INFO     | apscheduler.executors.default — Job "followup_2 (trigger: cron[hour='16', minute='35'], next run at: 2026-03-20 16:35:00 -03)" executed successfully
+2026-03-19 16:52:52,478 | INFO     | telegram.ext.Application — Application is stopping. This might take a moment.
+2026-03-19 16:52:52,481 | INFO     | apscheduler.scheduler — Scheduler has been shut down
+2026-03-19 16:52:52,505 | INFO     | telegram.ext.Application — Application.stop() complete
+2026-03-19 16:53:03,648 | INFO     | __main__ — Starting Telegram Reminder Bot…
+2026-03-19 16:53:07,588 | INFO     | __main__ — Running startup tasks…
+2026-03-19 16:53:07,614 | INFO     | database — Migrated UTC timezone rows to America/Argentina/Cordoba.
+2026-03-19 16:53:07,615 | INFO     | database — Database initialized successfully.
+2026-03-19 16:53:07,616 | INFO     | scheduler — PTB JobQueue ready (APScheduler id=2088010960240).
+2026-03-19 16:53:07,635 | INFO     | scheduler — Loading 4 active task(s) into job queue.
+2026-03-19 16:53:07,896 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 16:53:07,897 | INFO     | scheduler — Scheduled primary reminder 'reminder_1' — next run: N/A  (tz=America/Argentina/Cordoba)
+2026-03-19 16:53:07,898 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 16:53:07,899 | INFO     | scheduler — Scheduled follow-up reminder 'followup_1' — next run: N/A
+2026-03-19 16:53:07,900 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 16:53:07,901 | INFO     | scheduler — Scheduled daily summary 'summary_8041903654' — next run: N/A
+2026-03-19 16:53:07,902 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 16:53:07,903 | INFO     | scheduler — Scheduled primary reminder 'reminder_2' — next run: N/A  (tz=America/Argentina/Cordoba)
+2026-03-19 16:53:07,904 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 16:53:07,905 | INFO     | scheduler — Scheduled follow-up reminder 'followup_2' — next run: N/A
+2026-03-19 16:53:07,906 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 16:53:07,906 | INFO     | scheduler — Scheduled primary reminder 'reminder_3' — next run: N/A  (tz=America/Argentina/Cordoba)
+2026-03-19 16:53:07,908 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 16:53:07,909 | INFO     | scheduler — Scheduled follow-up reminder 'followup_3' — next run: N/A
+2026-03-19 16:53:07,911 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 16:53:07,911 | INFO     | scheduler — Scheduled primary reminder 'reminder_4' — next run: N/A  (tz=America/Argentina/Cordoba)
+2026-03-19 16:53:07,912 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 16:53:07,914 | INFO     | scheduler — Scheduled follow-up reminder 'followup_4' — next run: N/A
+2026-03-19 16:53:07,914 | INFO     | scheduler — === Scheduled jobs (9) ===
+2026-03-19 16:53:07,915 | INFO     | scheduler —   reminder_1                           next: N/A
+2026-03-19 16:53:07,916 | INFO     | scheduler —   followup_1                           next: N/A
+2026-03-19 16:53:07,916 | INFO     | scheduler —   summary_8041903654                   next: N/A
+2026-03-19 16:53:07,917 | INFO     | scheduler —   reminder_2                           next: N/A
+2026-03-19 16:53:07,917 | INFO     | scheduler —   followup_2                           next: N/A
+2026-03-19 16:53:07,918 | INFO     | scheduler —   reminder_3                           next: N/A
+2026-03-19 16:53:07,918 | INFO     | scheduler —   followup_3                           next: N/A
+2026-03-19 16:53:07,920 | INFO     | scheduler —   reminder_4                           next: N/A
+2026-03-19 16:53:07,921 | INFO     | scheduler —   followup_4                           next: N/A
+2026-03-19 16:53:07,921 | INFO     | scheduler — === End of job list ===
+2026-03-19 16:53:07,922 | INFO     | __main__ — Bot is ready.
+2026-03-19 16:53:08,200 | INFO     | apscheduler.scheduler — Added job "reminder_1" to job store "default"
+2026-03-19 16:53:08,203 | INFO     | apscheduler.scheduler — Added job "followup_1" to job store "default"
+2026-03-19 16:53:08,205 | INFO     | apscheduler.scheduler — Added job "summary_8041903654" to job store "default"
+2026-03-19 16:53:08,210 | INFO     | apscheduler.scheduler — Added job "reminder_2" to job store "default"
+2026-03-19 16:53:08,212 | INFO     | apscheduler.scheduler — Added job "followup_2" to job store "default"
+2026-03-19 16:53:08,217 | INFO     | apscheduler.scheduler — Added job "reminder_3" to job store "default"
+2026-03-19 16:53:08,219 | INFO     | apscheduler.scheduler — Added job "followup_3" to job store "default"
+2026-03-19 16:53:08,223 | INFO     | apscheduler.scheduler — Added job "reminder_4" to job store "default"
+2026-03-19 16:53:08,235 | INFO     | apscheduler.scheduler — Added job "followup_4" to job store "default"
+2026-03-19 16:53:08,240 | INFO     | apscheduler.scheduler — Scheduler started
+2026-03-19 16:53:08,244 | INFO     | telegram.ext.Application — Application started
+2026-03-19 16:53:08,248 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 16:53:08,251 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 20:16:00+00:00 (in 1371.748755 seconds)
+2026-03-19 16:53:42,968 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 16:53:45,370 | INFO     | ai_parser — classify_message intent=create_task lang=es
+2026-03-19 16:53:45,372 | INFO     | handlers.messages — Intent: create_task  user=marcoslopezt  text='recordame lavar los platos hoy a las 16:55'
+2026-03-19 16:53:56,022 | INFO     | database — Created task 5: lavar los platos
+2026-03-19 16:53:56,710 | INFO     | apscheduler.scheduler — Added job "reminder_5" to job store "default"
+2026-03-19 16:53:56,712 | INFO     | scheduler — Scheduled one-time reminder 'reminder_5' — fires at: 2026-03-19 16:55:00-03:00  (tz=America/Argentina/Cordoba)
+2026-03-19 16:53:56,716 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 16:53:56,717 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 19:55:00+00:00 (in 63.282305 seconds)
+2026-03-19 16:54:08,189 | ERROR    | __main__ — Unhandled exception:
+Traceback (most recent call last):
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\telegram\ext\_application.py", line 1335, in process_update
+    await coroutine
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\telegram\ext\_handlers\basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\plopez\IA\telegram-reminder-bot\handlers\commands.py", line 58, in start_command
+    updated = await db.update_assignee_user_ids(user.username, user.id)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\plopez\IA\telegram-reminder-bot\database.py", line 437, in update_assignee_user_ids
+    result = await db.execute(
+             ^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\aiosqlite\core.py", line 223, in execute
+    cursor = await self._execute(self._conn.execute, sql, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\aiosqlite\core.py", line 160, in _execute
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\aiosqlite\core.py", line 63, in _connection_worker_thread
+    result = function()
+sqlite3.IntegrityError: UNIQUE constraint failed: task_assignees.task_id, task_assignees.telegram_user_id
+2026-03-19 16:55:00,018 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 16:55:00,020 | INFO     | apscheduler.scheduler — Removed job 74fa2b44f61d4b68855733ddbe18d4e3
+2026-03-19 16:55:00,021 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 20:16:00+00:00 (in 1259.978231 seconds)
+2026-03-19 16:55:00,023 | INFO     | apscheduler.executors.default — Running job "reminder_5 (trigger: date[2026-03-19 16:55:00 -03], next run at: 2026-03-19 16:55:00 -03)" (scheduled at 2026-03-19 16:55:00-03:00)
+2026-03-19 16:55:00,025 | INFO     | scheduler — >>> ONE-TIME REMINDER JOB FIRED  task_id=5  chat_id=8041903654
+2026-03-19 16:55:00,046 | INFO     | scheduler — Task 5 not done yet; sending reminder to chat 8041903654.
+2026-03-19 16:55:00,978 | INFO     | scheduler — DMing 2 assignee(s) for task 5.
+2026-03-19 16:55:01,036 | INFO     | scheduler — One-time task 5 auto-deactivated.
+2026-03-19 16:55:01,038 | INFO     | apscheduler.executors.default — Job "reminder_5 (trigger: date[2026-03-19 16:55:00 -03], next run at: 2026-03-19 16:55:00 -03)" executed successfully
+2026-03-19 16:55:15,747 | INFO     | telegram.ext.Application — Application is stopping. This might take a moment.
+2026-03-19 16:55:15,749 | INFO     | apscheduler.scheduler — Scheduler has been shut down
+2026-03-19 16:55:15,773 | INFO     | telegram.ext.Application — Application.stop() complete
+2026-03-19 16:55:44,503 | INFO     | __main__ — Starting Telegram Reminder Bot…
+2026-03-19 16:55:47,534 | INFO     | __main__ — Running startup tasks…
+2026-03-19 16:55:47,710 | INFO     | database — Migrated UTC timezone rows to America/Argentina/Cordoba.
+2026-03-19 16:55:47,712 | INFO     | database — Database initialized successfully.
+2026-03-19 16:55:47,713 | INFO     | scheduler — PTB JobQueue ready (APScheduler id=2125912985280).
+2026-03-19 16:55:47,723 | INFO     | scheduler — Loading 0 active task(s) into job queue.
+2026-03-19 16:55:47,725 | INFO     | scheduler — No jobs currently scheduled.
+2026-03-19 16:55:47,726 | INFO     | __main__ — Bot is ready.
+2026-03-19 16:55:48,091 | INFO     | apscheduler.scheduler — Scheduler started
+2026-03-19 16:55:48,093 | INFO     | telegram.ext.Application — Application started
+2026-03-19 16:55:48,096 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 16:55:48,099 | DEBUG    | apscheduler.scheduler — No jobs; waiting until a job is added
+2026-03-19 16:56:20,129 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 16:56:23,277 | INFO     | ai_parser — classify_message intent=create_task lang=es
+2026-03-19 16:56:23,279 | INFO     | handlers.messages — Intent: create_task  user=marcoslopezt  text='recordame lavar los platos hoy a las 16:58'
+2026-03-19 16:56:27,033 | INFO     | database — Created task 1: lavar los platos
+2026-03-19 16:56:27,136 | INFO     | apscheduler.scheduler — Added job "reminder_1" to job store "default"
+2026-03-19 16:56:27,138 | INFO     | scheduler — Scheduled one-time reminder 'reminder_1' — fires at: 2026-03-19 16:58:00-03:00  (tz=America/Argentina/Cordoba)
+2026-03-19 16:56:27,141 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 16:56:27,142 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 19:58:00+00:00 (in 92.857543 seconds)
+2026-03-19 16:56:40,623 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 16:56:42,727 | INFO     | ai_parser — classify_message intent=list_tasks lang=es
+2026-03-19 16:56:42,729 | INFO     | handlers.messages — Intent: list_tasks  user=marcoslopezt  text='mostrame todas las tareas pendientes'
+2026-03-19 16:58:00,015 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 16:58:00,018 | INFO     | apscheduler.scheduler — Removed job 513b2a55a6d641cb86c4f2ece6c1da51
+2026-03-19 16:58:00,019 | DEBUG    | apscheduler.scheduler — No jobs; waiting until a job is added
+2026-03-19 16:58:00,021 | INFO     | apscheduler.executors.default — Running job "reminder_1 (trigger: date[2026-03-19 16:58:00 -03], next run at: 2026-03-19 16:58:00 -03)" (scheduled at 2026-03-19 16:58:00-03:00)
+2026-03-19 16:58:00,025 | INFO     | scheduler — >>> ONE-TIME REMINDER JOB FIRED  task_id=1  chat_id=8041903654
+2026-03-19 16:58:00,057 | INFO     | scheduler — Task 1 not done yet; sending reminder to chat 8041903654.
+2026-03-19 16:58:01,272 | INFO     | scheduler — DMing 1 assignee(s) for task 1.
+2026-03-19 16:58:01,303 | INFO     | scheduler — One-time task 1 auto-deactivated.
+2026-03-19 16:58:01,304 | INFO     | apscheduler.executors.default — Job "reminder_1 (trigger: date[2026-03-19 16:58:00 -03], next run at: 2026-03-19 16:58:00 -03)" executed successfully
