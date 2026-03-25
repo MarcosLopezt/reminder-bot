@@ -16,7 +16,7 @@ from telegram.ext import ContextTypes, ConversationHandler
 
 import database as db
 from ai_parser import format_parsed_task_for_display, parse_task_description
-from database import make_display_name
+from database import fmt_time, make_display_name
 from scheduler import remove_task_jobs, schedule_task_jobs, send_dm_with_fallback
 
 logger = logging.getLogger(__name__)
@@ -173,29 +173,54 @@ async def tasks_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     buttons = []
 
     for idx, task in enumerate(tasks, start=1):
-        completion = await db.get_completion_for_date(task["id"], today)
-        status_icon = "✅" if completion else "⏰"
-        freq = _format_frequency(task)
+        task_id = task["id"]
+        reminder_times = await db.get_reminder_times(task_id)
+        completions = await db.get_completions_for_date(task_id, today)
+        completed_ids = {c["reminder_time_id"] for c in completions}
+        freq = _format_frequency(task, reminder_times)
 
-        if completion:
-            done_by = completion.get("completed_by_name") or make_display_name(
-                completion.get("completed_by_username")
+        if reminder_times and len(reminder_times) > 1:
+            all_done = len(completions) >= len(reminder_times)
+            status_icon = "✅" if all_done else "⏰"
+            slot_parts = [
+                f"{'✅' if rt['id'] in completed_ids else '⏳'} {fmt_time(rt['reminder_time'])}"
+                for rt in reminder_times
+            ]
+            lines.append(
+                f"{idx}. {status_icon} <b>{task['description']}</b>\n"
+                f"   <i>{freq}</i>\n"
+                f"   {' · '.join(slot_parts)}"
             )
-            status_note = f"done by {done_by}"
+            row = []
+            for rt in reminder_times:
+                if rt["id"] not in completed_ids:
+                    row.append(InlineKeyboardButton(
+                        f"✅ Done ({fmt_time(rt['reminder_time'])})",
+                        callback_data=f"done:{task_id}:{rt['id']}",
+                    ))
+                    break
         else:
-            status_note = "pending"
+            completion = completions[0] if completions else None
+            status_icon = "✅" if completion else "⏰"
+            if completion:
+                done_by = completion.get("completed_by_name") or make_display_name(
+                    completion.get("completed_by_username")
+                )
+                status_note = f"done by {done_by}"
+            else:
+                status_note = "pending"
+            lines.append(
+                f"{idx}. {status_icon} <b>{task['description']}</b>\n"
+                f"   <i>{freq} — {status_note}</i>"
+            )
+            row = []
+            if not completion:
+                rtime_id = reminder_times[0]["id"] if reminder_times else 0
+                row.append(InlineKeyboardButton("✅ Done", callback_data=f"done:{task_id}:{rtime_id}"))
 
-        lines.append(
-            f"{idx}. {status_icon} <b>{task['description']}</b>\n"
-            f"   <i>{freq} — {status_note}</i>"
-        )
-
-        row = []
-        if not completion:
-            row.append(InlineKeyboardButton("✅ Done", callback_data=f"done:{task['id']}"))
         if task["is_active"]:
-            row.append(InlineKeyboardButton("⏸ Pause", callback_data=f"pause:{task['id']}"))
-        row.append(InlineKeyboardButton("🗑 Delete", callback_data=f"delete:{task['id']}"))
+            row.append(InlineKeyboardButton("⏸ Pause", callback_data=f"pause:{task_id}"))
+        row.append(InlineKeyboardButton("🗑 Delete", callback_data=f"delete:{task_id}"))
         buttons.append(row)
 
     await update.message.reply_text(
@@ -205,24 +230,22 @@ async def tasks_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     )
 
 
-def _format_frequency(task: dict) -> str:
+def _format_frequency(task: dict, reminder_times: Optional[list] = None) -> str:
     """Return a human-readable schedule string for a task."""
     freq = task["frequency"]
-    t = task["reminder_time"]
-    try:
-        h, m = t.split(":")
-        from datetime import time as dtime
-        display_time = dtime(int(h), int(m)).strftime("%I:%M %p").lstrip("0")
-    except Exception:
-        display_time = t
+
+    if reminder_times:
+        times_str = " and ".join(fmt_time(rt["reminder_time"]) for rt in reminder_times)
+    else:
+        times_str = fmt_time(task.get("reminder_time", ""))
 
     if freq == "daily":
-        return f"Daily at {display_time}"
+        return f"Daily at {times_str}"
     elif freq == "weekly" and task.get("reminder_day"):
-        return f"Every {task['reminder_day'].capitalize()} at {display_time}"
+        return f"Every {task['reminder_day'].capitalize()} at {times_str}"
     elif freq == "custom" and task.get("cron_expression"):
-        return f"Custom ({task['cron_expression']}) at {display_time}"
-    return f"At {display_time}"
+        return f"Custom ({task['cron_expression']}) at {times_str}"
+    return f"At {times_str}"
 
 
 # ---------------------------------------------------------------------------
@@ -264,10 +287,21 @@ async def _mark_task_done(
     user,
 ) -> None:
     """Core logic for recording a task completion and notifying assignees."""
+    import pytz
+    from datetime import datetime as _dt
+
     chat_id = update.effective_chat.id
     today = date.today().isoformat()
-
     mention = make_display_name(user.username, user.first_name)
+
+    # Determine which reminder slot to mark (most recent past uncompleted)
+    timezone_str = await db.get_chat_timezone(chat_id)
+    try:
+        tz = pytz.timezone(timezone_str)
+    except Exception:
+        tz = pytz.UTC
+    now_time_str = _dt.now(tz).strftime("%H:%M")
+    rtime_id = await db.get_active_slot(task["id"], now_time_str, today) or 0
 
     success = await db.record_completion(
         task_id=task["id"],
@@ -275,12 +309,13 @@ async def _mark_task_done(
         username=user.username,
         date_for=today,
         display_name=mention,
+        reminder_time_id=rtime_id,
     )
 
     if not success:
         completion = await db.get_completion_for_date(task["id"], today)
-        done_by = completion.get("completed_by_name") or make_display_name(
-            completion.get("completed_by_username")
+        done_by = (completion or {}).get("completed_by_name") or make_display_name(
+            (completion or {}).get("completed_by_username")
         )
         await update.message.reply_text(
             f"ℹ️ <b>{task['description']}</b> was already marked done by {done_by} today.",
@@ -393,7 +428,7 @@ async def _toggle_task(
         return
 
     if active:
-        schedule_task_jobs(task, bot)
+        await schedule_task_jobs(task, bot)
         await update.message.reply_text(
             f"▶️ <b>{task['description']}</b> has been resumed.",
             parse_mode=ParseMode.HTML,

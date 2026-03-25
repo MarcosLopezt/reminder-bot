@@ -18,7 +18,7 @@ from telegram.error import BadRequest, Forbidden, TelegramError
 from telegram.ext import CallbackContext, JobQueue
 
 import database as db
-from database import make_display_name
+from database import fmt_time, make_display_name
 
 logger = logging.getLogger(__name__)
 
@@ -122,23 +122,22 @@ async def send_dm_with_fallback(
 # Assignee notification (sent once when a task is created)
 # ---------------------------------------------------------------------------
 
-def _format_assignment_schedule(task: dict) -> str:
+def _format_assignment_schedule(task: dict, reminder_times: Optional[list] = None) -> str:
     """Short human-readable schedule string for assignment DMs."""
     freq = task.get("frequency", "")
-    t = task.get("reminder_time", "")
-    try:
-        h, m = t.split(":")
-        display_time = dtime(int(h), int(m)).strftime("%I:%M %p").lstrip("0")
-    except Exception:
-        display_time = t
+
+    if reminder_times:
+        times_str = " and ".join(fmt_time(rt["reminder_time"]) for rt in reminder_times)
+    else:
+        times_str = fmt_time(task.get("reminder_time", ""))
 
     if freq == "daily":
-        return f"daily at {display_time}"
+        return f"daily at {times_str}"
     if freq == "weekly" and task.get("reminder_day"):
-        return f"every {task['reminder_day'].capitalize()} at {display_time}"
+        return f"every {task['reminder_day'].capitalize()} at {times_str}"
     if freq == "custom" and task.get("cron_expression"):
         return f"custom ({task['cron_expression']})"
-    return f"at {display_time}"
+    return f"at {times_str}"
 
 
 async def notify_task_assigned(
@@ -154,7 +153,8 @@ async def notify_task_assigned(
     Assignees with user_id=0 are skipped — the confirm flow already warned the creator.
     """
     creator = make_display_name(created_by_username, created_by_first_name)
-    schedule_str = _format_assignment_schedule(task)
+    reminder_times = await db.get_reminder_times(task["id"])
+    schedule_str = _format_assignment_schedule(task, reminder_times or None)
     assignees = await db.get_task_assignees(task["id"])
 
     for assignee in assignees:
@@ -192,10 +192,11 @@ def _remove_jobs(name: str) -> None:
         logger.debug("Scheduled removal of job '%s'.", name)
 
 
-def schedule_task_jobs(task: dict, bot: Bot = None) -> None:
+async def schedule_task_jobs(task: dict, bot: Bot = None) -> None:
     """
     Register PTB JobQueue jobs for a single task.
 
+    Multi-slot tasks get one job per reminder time slot.
     One-time tasks use run_once(); recurring tasks use CronTrigger via run_custom().
     Both run on PTB's own asyncio event loop — no event-loop bridging required.
     """
@@ -214,102 +215,117 @@ def schedule_task_jobs(task: dict, bot: Bot = None) -> None:
         logger.warning("Unknown timezone '%s' for task %d, falling back to UTC.", timezone_str, task_id)
         tz = pytz.UTC
 
-    hour, minute = _parse_time(task["reminder_time"])
-    job_data = {"task_id": task_id, "chat_id": chat_id}
-    job_id_primary = f"reminder_{task_id}"
-    job_id_followup = f"followup_{task_id}"
+    # Remove all stale jobs for this task before re-scheduling
+    remove_task_jobs(task_id)
 
-    # Remove any stale jobs first
-    _remove_jobs(job_id_primary)
-    _remove_jobs(job_id_followup)
+    # Fetch reminder time slots; fall back to the legacy task.reminder_time column
+    reminder_times = await db.get_reminder_times(task_id)
+    if not reminder_times:
+        # Shouldn't happen after migration, but handle gracefully
+        reminder_times = [{"id": 0, "reminder_time": task["reminder_time"], "sort_order": 0}]
 
-    # --- One-time task: fire once at specific_date + reminder_time ---
-    if task_type == "one_time":
-        specific_date = task.get("specific_date")
-        if not specific_date:
-            logger.error("One-time task %d missing specific_date; skipping.", task_id)
-            return
-        try:
-            naive_dt = datetime.strptime(f"{specific_date} {hour:02d}:{minute:02d}", "%Y-%m-%d %H:%M")
-            aware_dt = tz.localize(naive_dt)
-        except Exception as exc:
-            logger.error("Cannot parse one-time datetime for task %d: %s", task_id, exc)
-            return
+    is_multi_slot = len(reminder_times) > 1
+    frequency = task.get("frequency", "daily")
+    reminder_day = task.get("reminder_day")
 
-        now_utc = datetime.now(pytz.UTC)
-        if aware_dt <= now_utc:
-            logger.info("One-time task %d at %s has already passed; skipping.", task_id, aware_dt)
-            return
+    for rt in reminder_times:
+        rtime_id = rt["id"]
+        hour, minute = _parse_time(rt["reminder_time"])
+        job_data = {
+            "task_id": task_id,
+            "chat_id": chat_id,
+            "reminder_time_id": rtime_id,
+            "reminder_time": rt["reminder_time"],
+            "is_multi_slot": is_multi_slot,
+        }
+        job_id_primary = f"reminder_{task_id}_{rtime_id}"
+        job_id_followup = f"followup_{task_id}_{rtime_id}"
 
-        job = job_queue.run_once(
-            _one_time_reminder_callback,
-            when=aware_dt,
+        # --- One-time task: fire once at specific_date + reminder_time ---
+        if task_type == "one_time":
+            specific_date = task.get("specific_date")
+            if not specific_date:
+                logger.error("One-time task %d missing specific_date; skipping.", task_id)
+                continue
+            try:
+                naive_dt = datetime.strptime(f"{specific_date} {hour:02d}:{minute:02d}", "%Y-%m-%d %H:%M")
+                aware_dt = tz.localize(naive_dt)
+            except Exception as exc:
+                logger.error("Cannot parse one-time datetime for task %d: %s", task_id, exc)
+                continue
+
+            now_utc = datetime.now(pytz.UTC)
+            if aware_dt <= now_utc:
+                logger.info("One-time task %d at %s has already passed; skipping.", task_id, aware_dt)
+                continue
+
+            job_queue.run_once(
+                _one_time_reminder_callback,
+                when=aware_dt,
+                data=job_data,
+                name=job_id_primary,
+            )
+            logger.info(
+                "Scheduled one-time reminder '%s' — fires at: %s  (tz=%s)",
+                job_id_primary, aware_dt, timezone_str,
+            )
+            continue
+
+        # --- Recurring task ---
+        if frequency == "daily":
+            primary_trigger = CronTrigger(hour=hour, minute=minute, timezone=tz)
+        elif frequency == "weekly" and reminder_day:
+            day_str = _DAY_MAP.get(reminder_day.lower(), reminder_day[:3].lower())
+            primary_trigger = CronTrigger(day_of_week=day_str, hour=hour, minute=minute, timezone=tz)
+        elif frequency == "custom" and task.get("cron_expression"):
+            parts = task["cron_expression"].split()
+            if len(parts) != 5:
+                logger.error("Invalid cron for task %d: %s", task_id, task["cron_expression"])
+                continue
+            primary_trigger = CronTrigger(
+                minute=parts[0], hour=parts[1],
+                day=parts[2], month=parts[3], day_of_week=parts[4],
+                timezone=tz,
+            )
+        else:
+            logger.error("Cannot schedule task %d slot %d: unrecognised frequency '%s'.", task_id, rtime_id, frequency)
+            continue
+
+        primary_job = job_queue.run_custom(
+            _reminder_callback,
+            job_kwargs={"trigger": primary_trigger, "id": job_id_primary, "replace_existing": True},
             data=job_data,
             name=job_id_primary,
         )
-        logger.info("Scheduled one-time reminder '%s' — fires at: %s  (tz=%s)", job_id_primary, aware_dt, timezone_str)
-        return
-
-    # --- Recurring task ---
-    frequency = task["frequency"]
-    reminder_day = task.get("reminder_day")
-
-    if frequency == "daily":
-        primary_trigger = CronTrigger(hour=hour, minute=minute, timezone=tz)
-    elif frequency == "weekly" and reminder_day:
-        day_str = _DAY_MAP.get(reminder_day.lower(), reminder_day[:3].lower())
-        primary_trigger = CronTrigger(day_of_week=day_str, hour=hour, minute=minute, timezone=tz)
-    elif frequency == "custom" and task.get("cron_expression"):
-        parts = task["cron_expression"].split()
-        if len(parts) != 5:
-            logger.error("Invalid cron expression for task %d: %s", task_id, task["cron_expression"])
-            return
-        primary_trigger = CronTrigger(
-            minute=parts[0], hour=parts[1],
-            day=parts[2], month=parts[3], day_of_week=parts[4],
-            timezone=tz,
-        )
-    else:
-        logger.error("Cannot schedule task %d: unrecognised frequency '%s'.", task_id, frequency)
-        return
-
-    primary_job = job_queue.run_custom(
-        _reminder_callback,
-        job_kwargs={"trigger": primary_trigger, "id": job_id_primary, "replace_existing": True},
-        data=job_data,
-        name=job_id_primary,
-    )
-    logger.info(
-        "Scheduled primary reminder '%s' — next run: %s  (tz=%s)",
-        job_id_primary,
-        getattr(primary_job.job, 'next_run_time', 'N/A'),
-        timezone_str,
-    )
-
-    # --- Follow-up trigger (2 h after primary, skip for custom) ---
-    followup_trigger = None
-    followup_hour = (hour + 2) % 24
-    if frequency == "daily":
-        followup_trigger = CronTrigger(hour=followup_hour, minute=minute, timezone=tz)
-    elif frequency == "weekly" and reminder_day:
-        followup_trigger = CronTrigger(
-            day_of_week=day_str, hour=followup_hour, minute=minute, timezone=tz
-        )
-
-    if followup_trigger:
-        followup_job = job_queue.run_custom(
-            _followup_callback,
-            job_kwargs={"trigger": followup_trigger, "id": job_id_followup, "replace_existing": True},
-            data=job_data,
-            name=job_id_followup,
-        )
         logger.info(
-            "Scheduled follow-up reminder '%s' — next run: %s",
-            job_id_followup,
-            getattr(followup_job.job, 'next_run_time', 'N/A'),
+            "Scheduled reminder '%s' — next run: %s  (tz=%s)",
+            job_id_primary,
+            getattr(primary_job.job, "next_run_time", "N/A"),
+            timezone_str,
         )
 
-    # --- Daily summary (one per chat_id) ---
+        # Follow-up 2 h later (skip for custom cron)
+        if frequency in ("daily", "weekly"):
+            followup_hour = (hour + 2) % 24
+            if frequency == "daily":
+                followup_trigger = CronTrigger(hour=followup_hour, minute=minute, timezone=tz)
+            else:
+                followup_trigger = CronTrigger(
+                    day_of_week=day_str, hour=followup_hour, minute=minute, timezone=tz
+                )
+            followup_job = job_queue.run_custom(
+                _followup_callback,
+                job_kwargs={"trigger": followup_trigger, "id": job_id_followup, "replace_existing": True},
+                data=job_data,
+                name=job_id_followup,
+            )
+            logger.info(
+                "Scheduled follow-up '%s' — next run: %s",
+                job_id_followup,
+                getattr(followup_job.job, "next_run_time", "N/A"),
+            )
+
+    # Daily summary — one per chat (register once regardless of slot count)
     summary_job_id = f"summary_{chat_id}"
     if not job_queue.get_jobs_by_name(summary_job_id):
         summary_trigger = CronTrigger(hour=23, minute=30, timezone=tz)
@@ -322,14 +338,22 @@ def schedule_task_jobs(task: dict, bot: Bot = None) -> None:
         logger.info(
             "Scheduled daily summary '%s' — next run: %s",
             summary_job_id,
-            getattr(summary_job.job, 'next_run_time', 'N/A'),
+            getattr(summary_job.job, "next_run_time", "N/A"),
         )
 
 
 def remove_task_jobs(task_id: int) -> None:
-    """Cancel all PTB jobs associated with a task."""
-    for prefix in ("reminder_", "followup_"):
-        _remove_jobs(f"{prefix}{task_id}")
+    """Cancel all PTB jobs associated with a task (handles all slots and legacy names)."""
+    if job_queue is None:
+        return
+    r_prefix = f"reminder_{task_id}"
+    f_prefix = f"followup_{task_id}"
+    for job in job_queue.jobs():
+        name = job.name
+        if name == r_prefix or name.startswith(r_prefix + "_") or \
+           name == f_prefix or name.startswith(f_prefix + "_"):
+            job.schedule_removal()
+            logger.debug("Scheduled removal of job '%s'.", name)
 
 
 async def load_all_tasks(bot: Bot) -> None:
@@ -341,7 +365,7 @@ async def load_all_tasks(bot: Bot) -> None:
     logger.info("Loading %d active task(s) into job queue.", len(tasks))
     for task in tasks:
         try:
-            schedule_task_jobs(task, bot)
+            await schedule_task_jobs(task, bot)
         except Exception:
             logger.exception("Failed to schedule task %d.", task["id"])
 
@@ -369,22 +393,30 @@ def _print_scheduled_jobs() -> None:
 
 async def _reminder_callback(context: CallbackContext) -> None:
     data = context.job.data
-    task_id, chat_id = data["task_id"], data["chat_id"]
+    task_id = data["task_id"]
+    chat_id = data["chat_id"]
+    rtime_id = data.get("reminder_time_id", 0)
+    reminder_time = data.get("reminder_time", "")
+    is_multi_slot = data.get("is_multi_slot", False)
     logger.info(
-        ">>> REMINDER JOB FIRED  task_id=%d  chat_id=%d  date=%s",
-        task_id, chat_id, date.today().isoformat(),
+        ">>> REMINDER JOB FIRED  task_id=%d  chat_id=%d  slot=%d  date=%s",
+        task_id, chat_id, rtime_id, date.today().isoformat(),
     )
-    await _send_reminder(task_id, chat_id, context.bot)
+    await _send_reminder(task_id, chat_id, context.bot, rtime_id, reminder_time, is_multi_slot)
 
 
 async def _followup_callback(context: CallbackContext) -> None:
     data = context.job.data
-    task_id, chat_id = data["task_id"], data["chat_id"]
+    task_id = data["task_id"]
+    chat_id = data["chat_id"]
+    rtime_id = data.get("reminder_time_id", 0)
+    reminder_time = data.get("reminder_time", "")
+    is_multi_slot = data.get("is_multi_slot", False)
     logger.info(
-        ">>> FOLLOW-UP JOB FIRED  task_id=%d  chat_id=%d",
-        task_id, chat_id,
+        ">>> FOLLOW-UP JOB FIRED  task_id=%d  chat_id=%d  slot=%d",
+        task_id, chat_id, rtime_id,
     )
-    await _send_followup(task_id, chat_id, context.bot)
+    await _send_followup(task_id, chat_id, context.bot, rtime_id, reminder_time, is_multi_slot)
 
 
 async def _daily_summary_callback(context: CallbackContext) -> None:
@@ -395,9 +427,13 @@ async def _daily_summary_callback(context: CallbackContext) -> None:
 
 async def _one_time_reminder_callback(context: CallbackContext) -> None:
     data = context.job.data
-    task_id, chat_id = data["task_id"], data["chat_id"]
+    task_id = data["task_id"]
+    chat_id = data["chat_id"]
+    rtime_id = data.get("reminder_time_id", 0)
+    reminder_time = data.get("reminder_time", "")
+    is_multi_slot = data.get("is_multi_slot", False)
     logger.info(">>> ONE-TIME REMINDER JOB FIRED  task_id=%d  chat_id=%d", task_id, chat_id)
-    await _send_reminder(task_id, chat_id, context.bot)
+    await _send_reminder(task_id, chat_id, context.bot, rtime_id, reminder_time, is_multi_slot)
     # Auto-deactivate after firing
     await db.set_task_active(task_id, False)
     logger.info("One-time task %d auto-deactivated.", task_id)
@@ -407,9 +443,9 @@ async def _one_time_reminder_callback(context: CallbackContext) -> None:
 # Reminder senders (actual logic, separate from PTB callback wrappers)
 # ---------------------------------------------------------------------------
 
-def _make_done_keyboard(task_id: int) -> InlineKeyboardMarkup:
+def _make_done_keyboard(task_id: int, reminder_time_id: int = 0) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
-        [[InlineKeyboardButton("✅ Mark as done", callback_data=f"done:{task_id}")]]
+        [[InlineKeyboardButton("✅ Mark as done", callback_data=f"done:{task_id}:{reminder_time_id}")]]
     )
 
 
@@ -422,34 +458,43 @@ def _completion_display_name(completion: dict) -> str:
     return f"@{username}" if username else "someone"
 
 
-async def _send_reminder(task_id: int, chat_id: int, bot: Bot) -> None:
+async def _send_reminder(
+    task_id: int,
+    chat_id: int,
+    bot: Bot,
+    reminder_time_id: int = 0,
+    reminder_time: str = "",
+    is_multi_slot: bool = False,
+) -> None:
     task = await db.get_task_by_id(task_id)
     if not task or not task["is_active"]:
         logger.info("Task %d not found or inactive; skipping.", task_id)
         return
 
     today = date.today().isoformat()
-    completion = await db.get_completion_for_date(task_id, today)
+    completion = await db.get_completion_for_slot(task_id, reminder_time_id, today)
+    slot_label = f" ({fmt_time(reminder_time)})" if is_multi_slot and reminder_time else ""
+    keyboard = _make_done_keyboard(task_id, reminder_time_id)
 
     try:
         if completion:
             done_by = _completion_display_name(completion)
-            logger.info("Task %d already done today by %s; sending status message.", task_id, done_by)
+            logger.info("Task %d slot %d already done today by %s.", task_id, reminder_time_id, done_by)
             await bot.send_message(
                 chat_id=chat_id,
-                text=f"✅ <b>{task['description']}</b> — already done today by {done_by}! Nothing to worry about.",
+                text=f"✅ <b>{task['description']}</b>{slot_label} — already done by {done_by}! Nothing to worry about.",
                 parse_mode="HTML",
             )
         else:
-            logger.info("Task %d not done yet; sending reminder to chat %d.", task_id, chat_id)
+            logger.info("Task %d slot %d not done; sending reminder to chat %d.", task_id, reminder_time_id, chat_id)
             await bot.send_message(
                 chat_id=chat_id,
-                text=f"🔔 <b>Reminder:</b> {task['description']} — nobody has done it yet today!",
+                text=f"🔔 <b>Reminder:</b> {task['description']}{slot_label} — nobody has done it yet!",
                 parse_mode="HTML",
-                reply_markup=_make_done_keyboard(task_id),
+                reply_markup=keyboard,
             )
             assignees = await db.get_task_assignees(task_id)
-            logger.info("DMing %d assignee(s) for task %d.", len(assignees), task_id)
+            logger.info("DMing %d assignee(s) for task %d slot %d.", len(assignees), task_id, reminder_time_id)
             for assignee in assignees:
                 await send_dm_with_fallback(
                     bot=bot,
@@ -457,34 +502,44 @@ async def _send_reminder(task_id: int, chat_id: int, bot: Bot) -> None:
                     username=assignee.get("telegram_username"),
                     group_chat_id=chat_id,
                     text=(
-                        f"🔔 <b>Reminder:</b> {task['description']} — "
+                        f"🔔 <b>Reminder:</b> {task['description']}{slot_label} — "
                         "it's your turn to take care of this!"
                     ),
-                    reply_markup=_make_done_keyboard(task_id),
+                    reply_markup=keyboard,
                 )
     except TelegramError as exc:
-        logger.error("Failed to send reminder for task %d: %s", task_id, exc)
+        logger.error("Failed to send reminder for task %d slot %d: %s", task_id, reminder_time_id, exc)
 
 
-async def _send_followup(task_id: int, chat_id: int, bot: Bot) -> None:
+async def _send_followup(
+    task_id: int,
+    chat_id: int,
+    bot: Bot,
+    reminder_time_id: int = 0,
+    reminder_time: str = "",
+    is_multi_slot: bool = False,
+) -> None:
     task = await db.get_task_by_id(task_id)
     if not task or not task["is_active"]:
         return
 
     today = date.today().isoformat()
-    if await db.get_completion_for_date(task_id, today):
-        logger.info("Task %d already done; skipping follow-up.", task_id)
+    if await db.get_completion_for_slot(task_id, reminder_time_id, today):
+        logger.info("Task %d slot %d already done; skipping follow-up.", task_id, reminder_time_id)
         return
+
+    slot_label = f" ({fmt_time(reminder_time)})" if is_multi_slot and reminder_time else ""
+    keyboard = _make_done_keyboard(task_id, reminder_time_id)
 
     try:
         await bot.send_message(
             chat_id=chat_id,
             text=(
-                f"⚠️ <b>Still pending:</b> {task['description']} — "
+                f"⚠️ <b>Still pending:</b> {task['description']}{slot_label} — "
                 "it hasn't been marked done yet! Please take care of it."
             ),
             parse_mode="HTML",
-            reply_markup=_make_done_keyboard(task_id),
+            reply_markup=keyboard,
         )
         assignees = await db.get_task_assignees(task_id)
         for assignee in assignees:
@@ -494,13 +549,13 @@ async def _send_followup(task_id: int, chat_id: int, bot: Bot) -> None:
                 username=assignee.get("telegram_username"),
                 group_chat_id=chat_id,
                 text=(
-                    f"⚠️ <b>Still pending:</b> {task['description']} — "
+                    f"⚠️ <b>Still pending:</b> {task['description']}{slot_label} — "
                     "this still hasn't been done! Please take care of it."
                 ),
-                reply_markup=_make_done_keyboard(task_id),
+                reply_markup=keyboard,
             )
     except TelegramError as exc:
-        logger.error("Failed to send follow-up for task %d: %s", task_id, exc)
+        logger.error("Failed to send follow-up for task %d slot %d: %s", task_id, reminder_time_id, exc)
 
 
 async def send_daily_summary(chat_id: int, bot: Bot) -> None:

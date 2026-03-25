@@ -79,12 +79,18 @@ async def confirm_task_callback(update: Update, context: ContextTypes.DEFAULT_TY
     created_by_first_name = pending.get("created_by_first_name")
     timezone = await db.get_chat_timezone(chat_id)
 
+    # Normalise reminder_times before create_task (Gemini returns a list now)
+    raw_times_pre = parsed.get("reminder_times") or [parsed.get("reminder_time", "09:00")]
+    if isinstance(raw_times_pre, str):
+        raw_times_pre = [raw_times_pre]
+    first_time = (raw_times_pre[0] if raw_times_pre else None) or "09:00"
+
     # Create the task record
     task_id = await db.create_task(
         chat_id=chat_id,
         description=parsed["description"],
         frequency=parsed.get("frequency") or "daily",
-        reminder_time=parsed["reminder_time"],
+        reminder_time=first_time,
         created_by=created_by,
         created_by_username=created_by_username,
         reminder_day=parsed.get("reminder_day"),
@@ -126,9 +132,19 @@ async def confirm_task_callback(update: Update, context: ContextTypes.DEFAULT_TY
             parse_mode="HTML",
         )
 
+    # Normalise reminder_times (accept both legacy reminder_time str and new list)
+    raw_times = parsed.get("reminder_times") or [parsed.get("reminder_time", "09:00")]
+    if isinstance(raw_times, str):
+        raw_times = [raw_times]
+    reminder_times = [t for t in raw_times if t] or ["09:00"]
+
+    # Persist reminder time slots
+    for i, t in enumerate(reminder_times):
+        await db.add_reminder_time(task_id, t, sort_order=i)
+
     # Schedule the reminder jobs
     task = await db.get_task_by_id(task_id)
-    schedule_task_jobs(task, context.bot)
+    await schedule_task_jobs(task, context.bot)
 
     # Notify assignees (who have already /started the bot) that they're assigned
     await notify_task_assigned(
@@ -169,8 +185,11 @@ async def done_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     query = update.callback_query
     await query.answer()
 
-    _, task_id_str = query.data.split(":", 1)
-    task_id = int(task_id_str)
+    # Format: done:{task_id}:{reminder_time_id}  (reminder_time_id defaults to 0)
+    parts = query.data.split(":")
+    task_id = int(parts[1])
+    reminder_time_id = int(parts[2]) if len(parts) > 2 else 0
+
     user = update.effective_user
     today = date.today().isoformat()
 
@@ -187,6 +206,7 @@ async def done_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         username=user.username,
         date_for=today,
         display_name=mention,
+        reminder_time_id=reminder_time_id,
     )
 
     if success:
@@ -196,9 +216,11 @@ async def done_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         )
         await _notify_other_assignees(task, user.id, user.username, context.bot)
     else:
-        completion = await db.get_completion_for_date(task_id, today)
-        done_by = completion.get("completed_by_name") or make_display_name(
-            completion.get("completed_by_username")
+        completion = await db.get_completion_for_slot(task_id, reminder_time_id, today)
+        if not completion:
+            completion = await db.get_completion_for_date(task_id, today)
+        done_by = (completion or {}).get("completed_by_name") or make_display_name(
+            (completion or {}).get("completed_by_username")
         )
         await query.edit_message_text(
             f"ℹ️ <b>{task['description']}</b> was already done today by {done_by}.",

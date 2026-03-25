@@ -52,7 +52,7 @@ JSON schema to return:
     "assignees": ["<usernames without @, lowercase>"],
     "include_self": true,
     "frequency": "<daily | weekly | custom>",
-    "reminder_time": "<HH:MM 24-h, default '09:00'>",
+    "reminder_times": ["<HH:MM 24-h — list ALL times mentioned, e.g. ['08:00', '22:00']>"],
     "reminder_day": "<monday-sunday or null>",
     "cron_expression": "<5-part cron or null>",
     "task_type": "<recurring | one_time>",
@@ -75,7 +75,7 @@ Rules:
     * "tomorrow", "on Friday", "next Monday", "on March 25", "tonight", "this afternoon" → task_type="one_time", resolve specific_date to YYYY-MM-DD.
     * "every day", "daily", "every week", "every Monday", "weekdays" → task_type="recurring", specific_date=null.
 - Resolve relative dates using the current date/time provided above (e.g. "tomorrow" = current date + 1 day).
-- reminder_time: convert natural language ("8am"→"08:00", "9pm"→"21:00", "noon"→"12:00"). Default "09:00".
+- reminder_times: list of ALL times mentioned. Convert natural language ("8am"→"08:00", "9pm"→"21:00", "noon"→"12:00"). Default ["09:00"] if no time given. Always a list, even for one time.
 - greeting intent: hi, hello, thanks, how are you, etc.
 - unknown: anything that doesn't fit other categories.
 - reply for unknown: acknowledge you didn't understand and briefly list what the bot can do — in the user's language.
@@ -153,24 +153,24 @@ async def classify_message(
 
 def _short_schedule(task: dict) -> str:
     """One-line schedule description for inclusion in the Gemini context prompt."""
-    t = task.get("reminder_time", "")
-    try:
-        h, m = t.split(":")
-        from datetime import time as dtime
-        t_fmt = dtime(int(h), int(m)).strftime("%I:%M %p").lstrip("0")
-    except Exception:
-        t_fmt = t
+    from database import fmt_time
+
+    # Support both legacy reminder_time (str) and new reminder_times (list)
+    raw_times = task.get("reminder_times") or [task.get("reminder_time", "09:00")]
+    if isinstance(raw_times, str):
+        raw_times = [raw_times]
+    times_str = " and ".join(fmt_time(t) for t in raw_times if t)
 
     if task.get("task_type") == "one_time" and task.get("specific_date"):
-        return f"one-time on {task['specific_date']} at {t_fmt}"
+        return f"one-time on {task['specific_date']} at {times_str}"
     freq = task.get("frequency", "")
     if freq == "daily":
-        return f"daily at {t_fmt}"
+        return f"daily at {times_str}"
     if freq == "weekly" and task.get("reminder_day"):
-        return f"every {task['reminder_day'].capitalize()} at {t_fmt}"
+        return f"every {task['reminder_day'].capitalize()} at {times_str}"
     if freq == "custom" and task.get("cron_expression"):
         return f"custom ({task['cron_expression']})"
-    return f"at {t_fmt}"
+    return f"at {times_str}"
 
 
 # ---------------------------------------------------------------------------
@@ -208,14 +208,22 @@ def format_parsed_task_for_display(parsed: dict, requesting_username: Optional[s
     Format parsed task data into a human-readable confirmation message.
     Used by /new command and natural-language task creation.
     """
+    from database import fmt_time
+
     desc = parsed.get("description", "Unknown task")
     frequency = parsed.get("frequency", "daily")
-    reminder_time = parsed.get("reminder_time", "09:00")
     reminder_day = parsed.get("reminder_day")
     assignees = parsed.get("assignees", [])
     include_self = parsed.get("include_self", True)
     task_type = parsed.get("task_type", "recurring")
     specific_date = parsed.get("specific_date")
+
+    # Normalize reminder_times — accept both old (str) and new (list) formats
+    raw_times = parsed.get("reminder_times") or [parsed.get("reminder_time", "09:00")]
+    if isinstance(raw_times, str):
+        raw_times = [raw_times]
+    reminder_times = [t for t in raw_times if t]
+    times_display = " and ".join(fmt_time(t) for t in reminder_times)
 
     assignee_parts = []
     if include_self:
@@ -224,25 +232,17 @@ def format_parsed_task_for_display(parsed: dict, requesting_username: Optional[s
     assignee_parts.extend(f"@{a}" for a in assignees)
     assignee_str = ", ".join(assignee_parts) if assignee_parts else "You"
 
-    try:
-        h, m = reminder_time.split(":")
-        from datetime import time as dtime
-        t = dtime(int(h), int(m))
-        time_display = t.strftime("%I:%M %p").lstrip("0")
-    except Exception:
-        time_display = reminder_time
-
     if task_type == "one_time" and specific_date:
-        schedule_str = f"One-time on {specific_date} at {time_display}"
+        schedule_str = f"One-time on {specific_date} at {times_display}"
     elif frequency == "daily":
-        schedule_str = f"Every day at {time_display}"
+        schedule_str = f"Every day at {times_display}"
     elif frequency == "weekly" and reminder_day:
-        schedule_str = f"Every {reminder_day.capitalize()} at {time_display}"
+        schedule_str = f"Every {reminder_day.capitalize()} at {times_display}"
     elif frequency == "custom":
         cron = parsed.get("cron_expression", "")
         schedule_str = f"Custom schedule ({cron})"
     else:
-        schedule_str = f"At {time_display}"
+        schedule_str = f"At {times_display}"
 
     lines = [
         "📋 <b>Here's what I understood:</b>\n",

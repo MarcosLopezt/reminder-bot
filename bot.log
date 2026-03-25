@@ -562,3 +562,139 @@ sqlite3.IntegrityError: UNIQUE constraint failed: task_assignees.task_id, task_a
 2026-03-19 16:58:01,272 | INFO     | scheduler — DMing 1 assignee(s) for task 1.
 2026-03-19 16:58:01,303 | INFO     | scheduler — One-time task 1 auto-deactivated.
 2026-03-19 16:58:01,304 | INFO     | apscheduler.executors.default — Job "reminder_1 (trigger: date[2026-03-19 16:58:00 -03], next run at: 2026-03-19 16:58:00 -03)" executed successfully
+2026-03-19 17:11:19,056 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 17:11:21,455 | INFO     | ai_parser — classify_message intent=create_task lang=es
+2026-03-19 17:11:21,456 | INFO     | handlers.messages — Intent: create_task  user=marcoslopezt  text='agrega una tarea para mi y para @plopezarg de pedir lomito todos los jueves a la'
+2026-03-19 17:11:32,519 | INFO     | database — Created task 2: pedir lomito
+2026-03-19 17:11:33,041 | INFO     | apscheduler.scheduler — Added job "reminder_2" to job store "default"
+2026-03-19 17:11:33,042 | INFO     | scheduler — Scheduled primary reminder 'reminder_2' — next run: 2026-03-19 20:00:00-03:00  (tz=America/Argentina/Cordoba)
+2026-03-19 17:11:33,044 | INFO     | apscheduler.scheduler — Added job "followup_2" to job store "default"
+2026-03-19 17:11:33,045 | INFO     | scheduler — Scheduled follow-up reminder 'followup_2' — next run: 2026-03-19 22:00:00-03:00
+2026-03-19 17:11:33,046 | INFO     | apscheduler.scheduler — Added job "summary_8041903654" to job store "default"
+2026-03-19 17:11:33,047 | INFO     | scheduler — Scheduled daily summary 'summary_8041903654' — next run: 2026-03-19 23:30:00-03:00
+2026-03-19 17:11:33,049 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 17:11:33,050 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 23:00:00+00:00 (in 10106.949845 seconds)
+2026-03-19 17:11:33,050 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 17:11:33,051 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 23:00:00+00:00 (in 10106.948386 seconds)
+2026-03-19 17:11:33,052 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 17:11:33,053 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 23:00:00+00:00 (in 10106.946994 seconds)
+2026-03-19 17:12:10,546 | INFO     | apscheduler.scheduler — Removed job reminder_2
+2026-03-19 17:12:10,547 | INFO     | apscheduler.scheduler — Removed job followup_2
+2026-03-19 17:17:24,427 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 17:17:27,454 | INFO     | ai_parser — classify_message intent=create_task lang=es
+2026-03-19 17:17:27,456 | INFO     | handlers.messages — Intent: create_task  user=marcoslopezt  text='agrega una tarea para mi y para @plopezarg de pedir lomito todos los jueves a la'
+2026-03-19 17:17:31,592 | INFO     | database — Created task 3: pedir lomito
+2026-03-19 17:17:31,731 | INFO     | apscheduler.scheduler — Added job "reminder_3" to job store "default"
+2026-03-19 17:17:31,733 | INFO     | scheduler — Scheduled primary reminder 'reminder_3' — next run: 2026-03-19 20:00:00-03:00  (tz=America/Argentina/Cordoba)
+2026-03-19 17:17:31,737 | INFO     | apscheduler.scheduler — Added job "followup_3" to job store "default"
+2026-03-19 17:17:31,739 | INFO     | scheduler — Scheduled follow-up reminder 'followup_3' — next run: 2026-03-19 22:00:00-03:00
+2026-03-19 17:17:31,744 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 17:17:31,745 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 23:00:00+00:00 (in 9748.254484 seconds)
+2026-03-19 17:17:31,747 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 17:17:31,748 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 23:00:00+00:00 (in 9748.251617 seconds)
+2026-03-19 17:20:23,105 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 17:20:34,000 | INFO     | ai_parser — classify_message intent=create_task lang=es
+2026-03-19 17:20:34,001 | INFO     | handlers.messages — Intent: create_task  user=marcoslopezt  text='crea un recordatorio para darle pastillas a ciro a las 10:00 y a las 22:00 todos'
+2026-03-19 17:21:32,303 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 17:21:36,467 | INFO     | ai_parser — classify_message intent=create_task lang=es
+2026-03-19 17:21:36,468 | INFO     | handlers.messages — Intent: create_task  user=marcoslopezt  text='agrega una tarea para darle pastillas a ciro todos los dias a las 10:00am y a la'
+2026-03-19 17:21:40,901 | ERROR    | __main__ — Unhandled exception:
+Traceback (most recent call last):
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\telegram\ext\_application.py", line 1335, in process_update
+    await coroutine
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\telegram\ext\_handlers\basehandler.py", line 157, in handle_update
+    return await self.callback(update, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\plopez\IA\telegram-reminder-bot\handlers\callbacks.py", line 326, in callback_router
+    await confirm_task_callback(update, context)
+  File "C:\Users\plopez\IA\telegram-reminder-bot\handlers\callbacks.py", line 83, in confirm_task_callback
+    task_id = await db.create_task(
+              ^^^^^^^^^^^^^^^^^^^^^
+    ...<11 lines>...
+    )
+    ^
+  File "C:\Users\plopez\IA\telegram-reminder-bot\database.py", line 147, in create_task
+    cursor = await db.execute(
+             ^^^^^^^^^^^^^^^^^
+    ...<12 lines>...
+    )
+    ^
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\aiosqlite\core.py", line 223, in execute
+    cursor = await self._execute(self._conn.execute, sql, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\aiosqlite\core.py", line 160, in _execute
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\plopez\AppData\Local\Programs\Python\Python313\Lib\site-packages\aiosqlite\core.py", line 63, in _connection_worker_thread
+    result = function()
+sqlite3.IntegrityError: NOT NULL constraint failed: tasks.reminder_time
+2026-03-19 17:59:49,145 | INFO     | telegram.ext.Application — Application is stopping. This might take a moment.
+2026-03-19 17:59:49,178 | INFO     | apscheduler.scheduler — Scheduler has been shut down
+2026-03-19 17:59:49,197 | INFO     | telegram.ext.Application — Application.stop() complete
+2026-03-19 17:59:58,830 | INFO     | __main__ — Starting Telegram Reminder Bot…
+2026-03-19 18:00:01,954 | INFO     | __main__ — Running startup tasks…
+2026-03-19 18:00:02,089 | INFO     | database — Migrated task_completions: added reminder_time_id column.
+2026-03-19 18:00:02,116 | INFO     | database — Populated task_reminder_times for 2 existing tasks.
+2026-03-19 18:00:02,130 | INFO     | database — Migrated UTC timezone rows to America/Argentina/Cordoba.
+2026-03-19 18:00:02,132 | INFO     | database — Database initialized successfully.
+2026-03-19 18:00:02,133 | INFO     | scheduler — PTB JobQueue ready (APScheduler id=2088637615472).
+2026-03-19 18:00:02,143 | INFO     | scheduler — Loading 1 active task(s) into job queue.
+2026-03-19 18:00:02,385 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 18:00:02,386 | INFO     | scheduler — Scheduled reminder 'reminder_3_2' — next run: N/A  (tz=America/Argentina/Cordoba)
+2026-03-19 18:00:02,387 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 18:00:02,387 | INFO     | scheduler — Scheduled follow-up 'followup_3_2' — next run: N/A
+2026-03-19 18:00:02,388 | INFO     | apscheduler.scheduler — Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-03-19 18:00:02,389 | INFO     | scheduler — Scheduled daily summary 'summary_8041903654' — next run: N/A
+2026-03-19 18:00:02,389 | INFO     | scheduler — === Scheduled jobs (3) ===
+2026-03-19 18:00:02,390 | INFO     | scheduler —   reminder_3_2                         next: N/A
+2026-03-19 18:00:02,390 | INFO     | scheduler —   followup_3_2                         next: N/A
+2026-03-19 18:00:02,390 | INFO     | scheduler —   summary_8041903654                   next: N/A
+2026-03-19 18:00:02,391 | INFO     | scheduler — === End of job list ===
+2026-03-19 18:00:02,392 | INFO     | __main__ — Bot is ready.
+2026-03-19 18:00:02,654 | INFO     | apscheduler.scheduler — Added job "reminder_3_2" to job store "default"
+2026-03-19 18:00:02,656 | INFO     | apscheduler.scheduler — Added job "followup_3_2" to job store "default"
+2026-03-19 18:00:02,659 | INFO     | apscheduler.scheduler — Added job "summary_8041903654" to job store "default"
+2026-03-19 18:00:02,660 | INFO     | apscheduler.scheduler — Scheduler started
+2026-03-19 18:00:02,663 | INFO     | telegram.ext.Application — Application started
+2026-03-19 18:00:02,666 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 18:00:02,667 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 23:00:00+00:00 (in 7197.332380 seconds)
+2026-03-19 18:00:56,998 | INFO     | google_genai.models — AFC is enabled with max remote calls: 10.
+2026-03-19 18:01:00,323 | INFO     | ai_parser — classify_message intent=create_task lang=es
+2026-03-19 18:01:00,325 | INFO     | handlers.messages — Intent: create_task  user=marcoslopezt  text='agrega una tarea para darle pastillas a ciro todos los dias a las 10:00am y a la'
+2026-03-19 18:01:08,170 | INFO     | database — Created task 4: darle pastillas a ciro
+2026-03-19 18:01:08,281 | INFO     | apscheduler.scheduler — Added job "reminder_4_3" to job store "default"
+2026-03-19 18:01:08,282 | INFO     | scheduler — Scheduled reminder 'reminder_4_3' — next run: 2026-03-20 10:00:00-03:00  (tz=America/Argentina/Cordoba)
+2026-03-19 18:01:08,284 | INFO     | apscheduler.scheduler — Added job "followup_4_3" to job store "default"
+2026-03-19 18:01:08,285 | INFO     | scheduler — Scheduled follow-up 'followup_4_3' — next run: 2026-03-20 12:00:00-03:00
+2026-03-19 18:01:08,288 | INFO     | apscheduler.scheduler — Added job "reminder_4_4" to job store "default"
+2026-03-19 18:01:08,289 | INFO     | scheduler — Scheduled reminder 'reminder_4_4' — next run: 2026-03-19 22:00:00-03:00  (tz=America/Argentina/Cordoba)
+2026-03-19 18:01:08,290 | INFO     | apscheduler.scheduler — Added job "followup_4_4" to job store "default"
+2026-03-19 18:01:08,291 | INFO     | scheduler — Scheduled follow-up 'followup_4_4' — next run: 2026-03-20 00:00:00-03:00
+2026-03-19 18:01:08,293 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 18:01:08,294 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 23:00:00+00:00 (in 7131.705405 seconds)
+2026-03-19 18:01:08,295 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 18:01:08,296 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 23:00:00+00:00 (in 7131.703445 seconds)
+2026-03-19 18:01:08,297 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 18:01:08,298 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 23:00:00+00:00 (in 7131.701328 seconds)
+2026-03-19 18:01:08,299 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 18:01:08,301 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-19 23:00:00+00:00 (in 7131.698818 seconds)
+2026-03-19 20:00:00,029 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 20:00:00,069 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-20 01:00:00+00:00 (in 7199.930125 seconds)
+2026-03-19 20:00:00,072 | INFO     | apscheduler.executors.default — Running job "reminder_3_2 (trigger: cron[day_of_week='thu', hour='20', minute='0'], next run at: 2026-03-26 20:00:00 -03)" (scheduled at 2026-03-19 20:00:00-03:00)
+2026-03-19 20:00:00,080 | INFO     | scheduler — >>> REMINDER JOB FIRED  task_id=3  chat_id=8041903654  slot=2  date=2026-03-19
+2026-03-19 20:00:00,113 | INFO     | scheduler — Task 3 slot 2 not done; sending reminder to chat 8041903654.
+2026-03-19 20:00:01,046 | INFO     | scheduler — DMing 2 assignee(s) for task 3 slot 2.
+2026-03-19 20:00:01,433 | INFO     | apscheduler.executors.default — Job "reminder_3_2 (trigger: cron[day_of_week='thu', hour='20', minute='0'], next run at: 2026-03-26 20:00:00 -03)" executed successfully
+2026-03-19 22:00:00,022 | DEBUG    | apscheduler.scheduler — Looking for jobs to run
+2026-03-19 22:00:00,035 | DEBUG    | apscheduler.scheduler — Next wakeup is due at 2026-03-20 02:30:00+00:00 (in 5399.964974 seconds)
+2026-03-19 22:00:00,036 | INFO     | apscheduler.executors.default — Running job "followup_3_2 (trigger: cron[day_of_week='thu', hour='22', minute='0'], next run at: 2026-03-26 22:00:00 -03)" (scheduled at 2026-03-19 22:00:00-03:00)
+2026-03-19 22:00:00,036 | INFO     | apscheduler.executors.default — Running job "reminder_4_4 (trigger: cron[hour='22', minute='0'], next run at: 2026-03-20 22:00:00 -03)" (scheduled at 2026-03-19 22:00:00-03:00)
+2026-03-19 22:00:00,037 | INFO     | scheduler — >>> FOLLOW-UP JOB FIRED  task_id=3  chat_id=8041903654  slot=2
+2026-03-19 22:00:00,038 | INFO     | scheduler — >>> REMINDER JOB FIRED  task_id=4  chat_id=8041903654  slot=4  date=2026-03-19
+2026-03-19 22:00:00,056 | INFO     | scheduler — Task 4 slot 4 not done; sending reminder to chat 8041903654.
+2026-03-19 22:00:00,988 | INFO     | scheduler — DMing 1 assignee(s) for task 4 slot 4.
+2026-03-19 22:00:00,988 | INFO     | apscheduler.executors.default — Job "reminder_4_4 (trigger: cron[hour='22', minute='0'], next run at: 2026-03-20 22:00:00 -03)" executed successfully
+2026-03-19 22:00:01,345 | INFO     | apscheduler.executors.default — Job "followup_3_2 (trigger: cron[day_of_week='thu', hour='22', minute='0'], next run at: 2026-03-26 22:00:00 -03)" executed successfully
+2026-03-19 22:54:18,294 | INFO     | telegram.ext.Application — Application is stopping. This might take a moment.
+2026-03-19 22:54:18,301 | INFO     | apscheduler.scheduler — Scheduler has been shut down
+2026-03-19 22:54:18,312 | INFO     | telegram.ext.Application — Application.stop() complete

@@ -19,6 +19,7 @@ from telegram.ext import ContextTypes
 import database as db
 from ai_parser import classify_message, format_parsed_task_for_display
 from database import make_display_name
+from database import fmt_time
 from scheduler import remove_task_jobs, schedule_task_jobs, send_dm_with_fallback
 
 logger = logging.getLogger(__name__)
@@ -181,26 +182,56 @@ async def _handle_list_tasks(
     buttons = []
 
     for idx, task in enumerate(tasks, start=1):
-        completion = await db.get_completion_for_date(task["id"], today)
-        status_icon = "✅" if completion else "⏰"
-        schedule = _format_schedule(task)
+        task_id = task["id"]
+        reminder_times = await db.get_reminder_times(task_id)
+        completions = await db.get_completions_for_date(task_id, today)
+        completed_ids = {c["reminder_time_id"] for c in completions}
 
-        if completion:
-            done_by = completion.get("completed_by_name") or make_display_name(completion.get("completed_by_username"))
-            status_note = f"done by {done_by}"
+        if reminder_times and len(reminder_times) > 1:
+            # Multi-slot: show per-slot status
+            all_done = len(completions) >= len(reminder_times)
+            status_icon = "✅" if all_done else "⏰"
+            slot_parts = []
+            for rt in reminder_times:
+                slot_done = rt["id"] in completed_ids
+                slot_parts.append(f"{'✅' if slot_done else '⏳'} {fmt_time(rt['reminder_time'])}")
+            schedule = _format_schedule(task)
+            status_note = " · ".join(slot_parts)
+            lines.append(
+                f"{idx}. {status_icon} <b>{task['description']}</b>\n"
+                f"   <i>{schedule}</i>\n"
+                f"   {status_note}"
+            )
+            row = []
+            # Add "Done" button for first uncompleted slot
+            for rt in reminder_times:
+                if rt["id"] not in completed_ids:
+                    row.append(InlineKeyboardButton(
+                        f"✅ Done ({fmt_time(rt['reminder_time'])})",
+                        callback_data=f"done:{task_id}:{rt['id']}",
+                    ))
+                    break  # Only show button for the first pending slot
         else:
-            status_note = "pending"
+            # Single-slot (legacy or single-time)
+            completion = completions[0] if completions else None
+            status_icon = "✅" if completion else "⏰"
+            schedule = _format_schedule(task)
+            if completion:
+                done_by = completion.get("completed_by_name") or make_display_name(completion.get("completed_by_username"))
+                status_note = f"done by {done_by}"
+            else:
+                status_note = "pending"
+            lines.append(
+                f"{idx}. {status_icon} <b>{task['description']}</b>\n"
+                f"   <i>{schedule} — {status_note}</i>"
+            )
+            row = []
+            if not completion:
+                rtime_id = reminder_times[0]["id"] if reminder_times else 0
+                row.append(InlineKeyboardButton("✅ Done", callback_data=f"done:{task_id}:{rtime_id}"))
 
-        lines.append(
-            f"{idx}. {status_icon} <b>{task['description']}</b>\n"
-            f"   <i>{schedule} — {status_note}</i>"
-        )
-
-        row = []
-        if not completion:
-            row.append(InlineKeyboardButton("✅ Done", callback_data=f"done:{task['id']}"))
-        row.append(InlineKeyboardButton("⏸ Pause", callback_data=f"pause:{task['id']}"))
-        row.append(InlineKeyboardButton("🗑 Delete", callback_data=f"delete:{task['id']}"))
+        row.append(InlineKeyboardButton("⏸ Pause", callback_data=f"pause:{task_id}"))
+        row.append(InlineKeyboardButton("🗑 Delete", callback_data=f"delete:{task_id}"))
         buttons.append(row)
 
     await update.message.reply_text(
@@ -281,13 +312,45 @@ async def _execute_task_action(
 # ---------------------------------------------------------------------------
 
 async def _do_complete(update, context, task, user, mention, chat_id):
+    import pytz
+    from datetime import datetime as _dt
+
     today = date.today().isoformat()
+    timezone_str = await db.get_chat_timezone(chat_id)
+    try:
+        tz = pytz.timezone(timezone_str)
+    except Exception:
+        tz = pytz.UTC
+    now_time_str = _dt.now(tz).strftime("%H:%M")
+
+    rtime_id = await db.get_active_slot(task["id"], now_time_str, today)
+
+    if rtime_id is None:
+        # Either all slots done or none have fired yet — check which
+        completions = await db.get_completions_for_date(task["id"], today)
+        reminder_times = await db.get_reminder_times(task["id"])
+        if completions and len(completions) >= max(len(reminder_times), 1):
+            last = completions[0]
+            done_by = last.get("completed_by_name") or make_display_name(last.get("completed_by_username")) or "someone"
+            await update.message.reply_text(
+                f"ℹ️ <b>{task['description']}</b> — all reminders already completed today by {done_by}!",
+                parse_mode=ParseMode.HTML,
+            )
+        else:
+            await update.message.reply_text(
+                f"ℹ️ No reminder slot has fired yet for <b>{task['description']}</b>. "
+                "I'll remind you at the scheduled time!",
+                parse_mode=ParseMode.HTML,
+            )
+        return
+
     success = await db.record_completion(
         task_id=task["id"],
         user_id=user.id,
         username=user.username,
         date_for=today,
         display_name=mention,
+        reminder_time_id=rtime_id,
     )
     if success:
         await update.message.reply_text(
@@ -307,8 +370,12 @@ async def _do_complete(update, context, task, user, mention, chat_id):
                 text=f"✅ <b>{task['description']}</b> has been completed by {mention}. No action needed from you!",
             )
     else:
-        completion = await db.get_completion_for_date(task["id"], today)
-        done_by = completion.get("completed_by_name") or make_display_name(completion.get("completed_by_username")) if completion else "someone"
+        completion = await db.get_completion_for_slot(task["id"], rtime_id, today)
+        if not completion:
+            completion = await db.get_completion_for_date(task["id"], today)
+        done_by = (completion or {}).get("completed_by_name") or make_display_name(
+            (completion or {}).get("completed_by_username")
+        ) or "someone"
         await update.message.reply_text(
             f"ℹ️ <b>{task['description']}</b> was already marked done by {done_by} today.",
             parse_mode=ParseMode.HTML,
@@ -344,7 +411,7 @@ async def _do_resume(update, context, task, user):
         await update.message.reply_text("❌ Only the task creator can resume it.")
         return
     await db.set_task_active(task["id"], True)
-    schedule_task_jobs(task, context.bot)
+    await schedule_task_jobs(task, context.bot)
     await update.message.reply_text(
         f"▶️ <b>{task['description']}</b> has been resumed.",
         parse_mode=ParseMode.HTML,
@@ -377,9 +444,14 @@ async def _do_edit(update, context, task, user, changes: dict):
         return
 
     await db.update_task_schedule(task["id"], reminder_time=new_time, reminder_day=new_day, frequency=new_frequency)
+
+    # If the time changed, replace the reminder_times slots too
+    if new_time:
+        await db.replace_reminder_times(task["id"], [new_time])
+
     updated_task = await db.get_task_by_id(task["id"])
     remove_task_jobs(task["id"])
-    schedule_task_jobs(updated_task, context.bot)
+    await schedule_task_jobs(updated_task, context.bot)
 
     await update.message.reply_text(
         f"✏️ <b>{task['description']}</b> updated: {_format_schedule(updated_task)}",
@@ -392,13 +464,12 @@ async def _do_edit(update, context, task, user, changes: dict):
 # ---------------------------------------------------------------------------
 
 def _format_schedule(task: dict) -> str:
-    t = task.get("reminder_time", "")
-    try:
-        h, m = t.split(":")
-        from datetime import time as dtime
-        time_display = dtime(int(h), int(m)).strftime("%I:%M %p").lstrip("0")
-    except Exception:
-        time_display = t
+    """Format a task's schedule as a short human-readable string.
+
+    Note: does not show multiple reminder times — call get_reminder_times() and
+    use fmt_time() directly when you need the full multi-slot display.
+    """
+    time_display = fmt_time(task.get("reminder_time", ""))
 
     if task.get("task_type") == "one_time" and task.get("specific_date"):
         return f"one-time on {task['specific_date']} at {time_display}"
